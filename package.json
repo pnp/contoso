@@ -1,0 +1,28 @@
+{
+  "name": "contoso-root",
+  "private": true,
+  "version": "0.0.1",
+  "description": "main repo for ISV focused reference samples covering scenarios with fully realized example solutions.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pnp/contoso.git"
+  },
+  "keywords": [
+    "SharePoint",
+    "ODSP",
+    "OneDrive",
+    "Microsoft365",
+    "ISV",
+    "PnP"
+  ],
+  "author": "Microsoft",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pnp/contoso/issues"
+  },
+  "homepage": "https://github.com/pnp/contoso#readme",
+  "devDependencies": { }
+}

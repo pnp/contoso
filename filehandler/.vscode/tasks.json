@@ -1,0 +1,54 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "run-next-dev",
+            "type": "shell",
+            "command": "npm run dev",
+            "args": [],
+            "isBackground": true,
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "launch-edge",
+            "type": "shell",
+            "command": "C:/Program Files (x86)/Microsoft/Edge Dev/Application/msedge.exe",
+            "args": [
+                "--remote-debugging-port=2015",
+                "--inprivate",
+                "http://localhost:3000/utility/install-app"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "build-local-setup",
+            "type": "shell",
+            "command": "tsc -p ./tools/local-setup",
+            "args": [],
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false
+            }
+        },
+    ]
+}
