@@ -10,124 +10,43 @@ import Layout from "../../components/layout";
 import MonacoEditor from "../../components/monaco-editor";
 import MarkdownPreview from "../../components/markdown-preview";
 
-import { StringDecoder } from "string_decoder";
-
 import { IActivationProps } from "../../lib/types";
 
+import { IStackTokens, Stack as StackTyper } from "office-ui-fabric-react/lib/Stack";
+import { withSession } from "../../lib/withSession";
+
+import { readRequestBody } from "../../lib/utils";
+import { withAuth } from "../../lib/withAuth";
 
 // these are needed to cheat the typings for dynamic imports
-import { PrimaryButton as PrimaryButtonTyper, DefaultButton as DefaultButtonTyper } from "office-ui-fabric-react/lib/Button";
-import { IStackTokens, Stack as StackTyper } from "office-ui-fabric-react/lib/Stack";
-import { getToken } from "../../hooks/useAppToken";
+import { PrimaryButton as PrimaryButtonTyper, DefaultButton as DefaultButtonTyper } from "office-ui-fabric-react/lib-commonjs/Button";
 
-// // // Example formatting
-// const stackTokens: IStackTokens = { childrenGap: 40 };
-const PrimaryButton = dynamic(import("office-ui-fabric-react/lib/Button").then(r => r.PrimaryButton) as Promise<typeof PrimaryButtonTyper>, { ssr: false });
-const DefaultButton = dynamic(import("office-ui-fabric-react/lib/Button").then(r => r.DefaultButton) as Promise<typeof DefaultButtonTyper>, { ssr: false });
-const Stack = dynamic(import("office-ui-fabric-react/lib/Stack").then(r => r.Stack) as Promise<typeof StackTyper>, { ssr: false });
+const PrimaryButton = dynamic(import("office-ui-fabric-react/lib-commonjs/Button").then(r => r.PrimaryButton) as Promise<typeof PrimaryButtonTyper>, { ssr: false });
+const DefaultButton = dynamic(import("office-ui-fabric-react/lib-commonjs/Button").then(r => r.DefaultButton) as Promise<typeof DefaultButtonTyper>, { ssr: false });
+const Stack = dynamic(import("office-ui-fabric-react/lib-commonjs/Stack").then(r => r.Stack) as Promise<typeof StackTyper>, { ssr: false });
 
 const stackTokens: IStackTokens = { childrenGap: 40 };
 
-//      // import { IButtonProps } from "office-ui-fabric-react/lib/Button";
-
-//      import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
-
-//      export interface IButtonExampleProps {
-//        // These are set based on the toggles shown above the examples (not needed in real code)
-//        disabled?: boolean;
-//        checked?: boolean;
-//      }
-
-//      // Example formatting
-//      
-
-//      export const ButtonDefaultExample: React.FunctionComponent<IButtonExampleProps> = props => {
-//        const { disabled, checked } = props;
-
-//        return (
-//          <Stack horizontal tokens={stackTokens}>
-//            <DefaultButton text="Standard" onClick={_alertClicked} allowDisabledFocus disabled={disabled} checked={checked} />
-//            <PrimaryButton text="Primary" onClick={_alertClicked} allowDisabledFocus disabled={disabled} checked={checked} />
-//          </Stack>
-//        );
-//      };
-{/* <Stack horizontal wrap tokens={stackTokens}>
-      <DefaultButton
-        text="Standard"
-        split
-        splitButtonAriaLabel="See 2 options"
-        aria-roledescription="split button"
-        menuProps={menuProps}
-        onClick={_alertClicked}
-        disabled={disabled}
-        checked={checked}
-      />
-      <DefaultButton
-        text="Primary"
-        primary
-        split
-        splitButtonAriaLabel="See 2 options"
-        aria-roledescription="split button"
-        menuProps={menuProps}
-        onClick={_alertClicked}
-        disabled={disabled}
-        checked={checked}
-      />
-      <DefaultButton
-        text="Main action disabled"
-        primaryDisabled
-        split
-        splitButtonAriaLabel="See 2 options"
-        aria-roledescription="split button"
-        menuProps={menuProps}
-        onClick={_alertClicked}
-        disabled={disabled}
-        checked={checked}
-      /> */}
-
-// const menuProps: IContextualMenuProps = {
-//   items: [
-//     {
-//       key: 'emailMessage',
-//       text: 'Email message',
-//       iconProps: { iconName: 'Mail' },
-//     },
-//     {
-//       key: 'calendarEvent',
-//       text: 'Calendar event',
-//       iconProps: { iconName: 'Calendar' },
-//     },
-//   ],
-// };
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
+const getServerSidePropsHandler: GetServerSideProps = async ({ req, res }) => {
 
   let activationParams: Partial<IActivationProps> = {};
 
-  const buffer = await (new Promise<string>(resolve => {
-    const decoder = new StringDecoder("utf-8");
-    let b = "";
-
-    context.req.on("data", (chunk) => {
-      b += decoder.write(chunk);
-    });
-
-    context.req.on("end", () => {
-      b += decoder.end();
-      resolve(b);
-    });
-  }));
+  const buffer = await readRequestBody(req);
 
   activationParams = buffer.split("&").map(v => v.split("=")).reduce((prev: Partial<IActivationProps>, curr: any[]) => {
     prev[curr[0]] = curr[0] === "items" ? JSON.parse(decodeURIComponent(curr[1])) : curr[1];
     return prev;
   }, {});
 
-  const [applyToken] = await getToken(activationParams.appId);
+  const token = await withAuth(req as any, res, activationParams as any);
 
   // read the file from the url supplied via the activation params
   // we do this on the server due to cors and redirect issues when trying to do it on the client
-  const response = await fetch(`${activationParams.items[0]}/content`, applyToken());
+  const response = await fetch(`${activationParams.items[0]}/content`, {
+    headers: {
+      "authorization": `Bearer ${token}`
+    },
+  });
 
   // set the content for the client
   activationParams.content = await response.text();
@@ -138,46 +57,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
+export const getServerSideProps = withSession(getServerSidePropsHandler);
 
 /*
-<li><a href="#" onclick="saveChangesToHost()">Save</a></li>
-var itemUrl = $('#itemUrl').val();
-        var url = "/api/editor/saveContentChanges?fileUrl=" + encodeURIComponent(itemUrl)
-        var contents = $('#content').val();
-        var body = { MarkdownText: contents };
-        $.ajax({
-            method: "POST",
-            data: JSON.stringify(body),
-            processData: false,
-            contentType: "application/json; charset=UTF-8",
-            url: url,
-            success: function (data, status, xhr) {
-                if (!data.Success) {
-                    window.alert("An error occured saving this file: " + data.Error);
-                } else {
-                    hasUnsavedChanges = false;
-                    window.alert("Saved changes.");
-                }
-            },
-            error: function (xhr, status, errorThrown) {
-                window.alert("An error occured saving this file: " + errorThrown);
-            }
-        });
-
-
 
 <li><a href="#" onclick="renameFile()">Rename</a></li>
 
-
-
 <li><a href="#" onclick="shareLinkToFile()">Get link</a></li>
 
-
-<li><a href="#" onclick="closeEditor()">Close</a></li>
-    function closeEditor() {
-      // TODO: Prompt to save changes
-      window.close();
-    }
 */
 
 

@@ -83,8 +83,13 @@ var EnsureApp = function (token) { return __awaiter(_this, void 0, void 0, funct
                 logger_1.log("Created new application with name " + createResponseJson.displayName + " and appId " + createResponseJson.appId + ".");
                 logger_1.log("Updating application public client redirectUris.");
                 return [4 /*yield*/, fetch_1.fetch("https://graph.microsoft.com/v1.0/applications/" + createResponseJson.id, __assign({ body: JSON.stringify({
-                            publicClient: {
-                                redirectUris: ["msal" + createResponseJson.appId + "://auth", "https://localhost:3000/login"],
+                            web: {
+                                redirectUris: ["https://localhost:3000/api/auth/login"],
+                                logoutUrl: "https://localhost:3000/api/auth/logout",
+                                implicitGrantSettings: {
+                                    enableIdTokenIssuance: false,
+                                    enableAccessTokenIssuance: false,
+                                },
                             },
                         }), method: "PATCH" }, headers)).then(fetch_1.isError)];
             case 3:

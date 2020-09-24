@@ -29,21 +29,18 @@ async function handleSave(req: NextApiRequest, res: NextApiResponse): Promise<vo
     const [applyToken] = await getToken(appId);
 
     if (typeof content === "undefined" || content.length < 1) {
-        res.status(400);
-        return;
+        return res.status(400).end();
     }
 
     if (typeof fileUrl === "undefined" || fileUrl.length < 1) {
-        res.status(400);
-        return;
+        return res.status(400).end();
     }
 
     const itemInfoResponse = await fetch(fileUrl, applyToken());
     if (!itemInfoResponse.ok) {
         const errInfo = await itemInfoResponse.clone().text();
         console.error(errInfo);
-        res.status(401).end("Error getting authentication token.");
-        return;
+        return res.status(401).end("Error getting authentication token.");
     }
 
     const itemInfo: DriveItem = await itemInfoResponse.clone().json();
@@ -58,9 +55,9 @@ async function handleSave(req: NextApiRequest, res: NextApiResponse): Promise<vo
 
     if (!updateResult.ok) {
         const err = await updateResult.clone().text();
+        // TODO:: log errors in telemetry
         console.error(err);
-        res.status(updateResult.status).end(`Update failed. Request Id: ${requestId}`);
-        return;
+        return res.status(updateResult.status).end(`Update failed. Request Id: ${requestId}`);
     }
 
     res.status(200).end();

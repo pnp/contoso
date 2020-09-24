@@ -31,12 +31,6 @@
     },
     {
       "type": "node",
-      "request": "attach",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-    },
-    {
-      "type": "node",
       "request": "launch",
       "name": "Debug: local-setup",
       "preLaunchTask": "build-local-setup",

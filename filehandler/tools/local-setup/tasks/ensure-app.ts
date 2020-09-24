@@ -54,8 +54,13 @@ const EnsureApp = async (token: string): Promise<{ displayName: string, appId: s
 
     await fetch(`https://graph.microsoft.com/v1.0/applications/${createResponseJson.id}`, {
         body: JSON.stringify(<IApplication>{
-            publicClient: {
-                redirectUris: [`msal${createResponseJson.appId}://auth`, "https://localhost:3000/login"],
+            web: {
+                redirectUris: ["https://localhost:3000/api/auth/login"],
+                logoutUrl: "https://localhost:3000/api/auth/logout",
+                implicitGrantSettings: {
+                    enableIdTokenIssuance: false,
+                    enableAccessTokenIssuance: false,
+                },
             },
         }),
         method: "PATCH",
@@ -110,7 +115,7 @@ const EnsureApp = async (token: string): Promise<{ displayName: string, appId: s
     log(`Adding app secret...`);
 
     const addPasswordResponseJson = await fetch(`https://graph.microsoft.com/v1.0/applications/${createResponseJson.id}/addPassword`, {
-        body: JSON.stringify(<{displayName: string}>{
+        body: JSON.stringify(<{ displayName: string }>{
             displayName: "local-testing-secret",
         }),
         method: "POST",
