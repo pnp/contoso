@@ -15,8 +15,7 @@ import { IActivationProps } from "../../lib/types";
 import { IStackTokens, Stack as StackTyper } from "office-ui-fabric-react/lib/Stack";
 import { withSession } from "../../lib/withSession";
 
-import { readRequestBody } from "../../lib/utils";
-import { withAuth } from "../../lib/withAuth";
+import { withInit } from "../../lib/withInit";
 
 // these are needed to cheat the typings for dynamic imports
 import { PrimaryButton as PrimaryButtonTyper, DefaultButton as DefaultButtonTyper } from "office-ui-fabric-react/lib-commonjs/Button";
@@ -29,22 +28,13 @@ const stackTokens: IStackTokens = { childrenGap: 40 };
 
 const getServerSidePropsHandler: GetServerSideProps = async ({ req, res }) => {
 
-  let activationParams: Partial<IActivationProps> = {};
-
-  const buffer = await readRequestBody(req);
-
-  activationParams = buffer.split("&").map(v => v.split("=")).reduce((prev: Partial<IActivationProps>, curr: any[]) => {
-    prev[curr[0]] = curr[0] === "items" ? JSON.parse(decodeURIComponent(curr[1])) : curr[1];
-    return prev;
-  }, {});
-
-  const token = await withAuth(req as any, res, activationParams as any);
+  const [token, activationParams] = await withInit(req as any, res);
 
   // read the file from the url supplied via the activation params
   // we do this on the server due to cors and redirect issues when trying to do it on the client
   const response = await fetch(`${activationParams.items[0]}/content`, {
     headers: {
-      "authorization": `Bearer ${token}`
+      "authorization": `Bearer ${token}`,
     },
   });
 

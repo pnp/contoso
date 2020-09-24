@@ -43,17 +43,6 @@ const EnsureApp = async (token: string): Promise<{ displayName: string, appId: s
             displayName: appDisplayName,
             isFallbackPublicClient: true,
             signInAudience: "AzureADMyOrg",
-        }),
-        method: "POST",
-        ...headers,
-    }).then(isError).then(toJson<IApplication>());
-
-    log(`Created new application with name ${createResponseJson.displayName} and appId ${createResponseJson.appId}.`);
-
-    log(`Updating application public client redirectUris.`);
-
-    await fetch(`https://graph.microsoft.com/v1.0/applications/${createResponseJson.id}`, {
-        body: JSON.stringify(<IApplication>{
             web: {
                 redirectUris: ["https://localhost:3000/api/auth/login"],
                 logoutUrl: "https://localhost:3000/api/auth/logout",
@@ -63,11 +52,11 @@ const EnsureApp = async (token: string): Promise<{ displayName: string, appId: s
                 },
             },
         }),
-        method: "PATCH",
+        method: "POST",
         ...headers,
-    }).then(isError);
+    }).then(isError).then(toJson<IApplication>());
 
-    log(`Updated application public client redirectUris.`);
+    log(`Created new application with name ${createResponseJson.displayName} and appId ${createResponseJson.appId}.`);
 
     log(`Creating service principal for appId: ${createResponseJson.appId}.`);
 
@@ -103,7 +92,7 @@ const EnsureApp = async (token: string): Promise<{ displayName: string, appId: s
             endTime: "9000-01-01T00:00:00",
             principalId: null,
             resourceId: principalInfos[0].id,
-            scope: "openid Files.ReadWrite",
+            scope: "openid Files.ReadWrite.All",
             startTime: "0001-01-01T00:00:00",
         }),
         method: "POST",

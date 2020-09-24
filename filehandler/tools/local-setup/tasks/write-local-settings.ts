@@ -2,13 +2,14 @@ import { log, enter, leave } from "../logger";
 import { writeFileSync } from "fs";
 import {resolve } from "path";
 
-const WriteLocalSettings = async (path: string, appId: string, appSecret: string) => {
+const WriteLocalSettings = async (path: string, tenantId: string, appId: string, appSecret: string) => {
 
     enter("InjectManifest");
 
     log(`Writing settings file.`);
 
     const file = [];
+    file.push(`export const appTenantId = "${tenantId}";`);
     file.push(`export const appId = "${appId}";`);
     file.push(`export const appSecret = "${appSecret}";`);
 

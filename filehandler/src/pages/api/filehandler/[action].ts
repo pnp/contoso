@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from "../../../hooks/useAppToken";
+import { withInit } from "../../../lib/withInit";
 import { DriveItem } from "@microsoft/microsoft-graph-types";
+import { withSession } from "../../../lib/withSession";
+import { Session } from "next-iron-session";
 
 export const config = {
     api: {
@@ -10,7 +12,7 @@ export const config = {
     },
 };
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
 
     const { action } = req.query;
 
@@ -22,11 +24,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             res.status(404).end();
     }
 };
+export default withSession(handler);
 
-async function handleSave(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+async function handleSave(req: NextApiRequest & { session: Session }, res: NextApiResponse): Promise<void> {
 
-    const { appId, content, fileUrl, requestId }: { appId: string; content: string; fileUrl: string; requestId: string; } = req.body;
-    const [applyToken] = await getToken(appId);
+    const { content, fileUrl, requestId }: { content: string; fileUrl: string; requestId: string; } = req.body;
+
+    const [token] = await withInit(req as any, res);
 
     if (typeof content === "undefined" || content.length < 1) {
         return res.status(400).end();
@@ -36,7 +40,11 @@ async function handleSave(req: NextApiRequest, res: NextApiResponse): Promise<vo
         return res.status(400).end();
     }
 
-    const itemInfoResponse = await fetch(fileUrl, applyToken());
+    const itemInfoResponse = await fetch(fileUrl, {
+        headers: {
+            "authorization": `Bearer ${token}`,
+        },
+    });
     if (!itemInfoResponse.ok) {
         const errInfo = await itemInfoResponse.clone().text();
         console.error(errInfo);
@@ -50,7 +58,9 @@ async function handleSave(req: NextApiRequest, res: NextApiResponse): Promise<vo
     const updateResult = await fetch(contentUrl, {
         body: Buffer.from(content),
         method: "PUT",
-        ...applyToken(),
+        headers: {
+            "authorization": `Bearer ${token}`,
+        },
     });
 
     if (!updateResult.ok) {
