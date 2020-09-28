@@ -9,5 +9,3 @@ import setup from "../index";
 
     process.exit();
 })();
-
-// TODO:: eventually we can make this interactive

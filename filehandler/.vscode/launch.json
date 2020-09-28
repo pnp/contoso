@@ -17,6 +17,7 @@
       "type": "node",
       "request": "launch",
       "name": "Next: Node",
+      "protocol": "inspector",
       "args": [
         "${workspaceFolder}/src/dev-server/server.js"
       ],

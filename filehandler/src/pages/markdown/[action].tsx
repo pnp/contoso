@@ -1,8 +1,10 @@
+/**
+ * Page used to preview, edit, and create markdown files within our File Handler
+ */
 import React, { useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";
-import dynamic from "next/dynamic";
 
 import useDebounce from "../../hooks/useDebounce";
 
@@ -11,24 +13,38 @@ import MonacoEditor from "../../components/monaco-editor";
 import MarkdownPreview from "../../components/markdown-preview";
 
 import { IActivationProps } from "../../lib/types";
-
-import { IStackTokens, Stack as StackTyper } from "office-ui-fabric-react/lib/Stack";
 import { withSession } from "../../lib/withSession";
+import { initHandler } from "../../lib/initHandler";
 
-import { withInit } from "../../lib/withInit";
+import { v4 } from "uuid";
 
-// these are needed to cheat the typings for dynamic imports
-import { PrimaryButton as PrimaryButtonTyper, DefaultButton as DefaultButtonTyper } from "office-ui-fabric-react/lib-commonjs/Button";
-
-const PrimaryButton = dynamic(import("office-ui-fabric-react/lib-commonjs/Button").then(r => r.PrimaryButton) as Promise<typeof PrimaryButtonTyper>, { ssr: false });
-const DefaultButton = dynamic(import("office-ui-fabric-react/lib-commonjs/Button").then(r => r.DefaultButton) as Promise<typeof DefaultButtonTyper>, { ssr: false });
-const Stack = dynamic(import("office-ui-fabric-react/lib-commonjs/Stack").then(r => r.Stack) as Promise<typeof StackTyper>, { ssr: false });
+import {
+  PrimaryButton,
+  DefaultButton,
+  MessageBarButton,
+  MessageBar,
+  MessageBarType,
+  IStackTokens,
+  Stack,
+} from "office-ui-fabric-react/lib-commonjs";
 
 const stackTokens: IStackTokens = { childrenGap: 40 };
 
+// shape of our message bar state
+interface MessageBarState {
+  show: boolean;
+  message?: string;
+  type?: MessageBarType;
+}
+
+/**
+ * nextjs method to handle server-side initialization of the page
+ * 
+ * @see https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
+ */
 const getServerSidePropsHandler: GetServerSideProps = async ({ req, res }) => {
 
-  const [token, activationParams] = await withInit(req as any, res);
+  const [token, activationParams] = await initHandler(req as any, res);
 
   // read the file from the url supplied via the activation params
   // we do this on the server due to cors and redirect issues when trying to do it on the client
@@ -49,20 +65,21 @@ const getServerSidePropsHandler: GetServerSideProps = async ({ req, res }) => {
 };
 export const getServerSideProps = withSession(getServerSidePropsHandler);
 
-/*
-
-<li><a href="#" onclick="renameFile()">Rename</a></li>
-
-<li><a href="#" onclick="shareLinkToFile()">Get link</a></li>
-
-*/
-
-
+/**
+ * Our functional page component
+ * 
+ * @param props supplied by getServerSidePropsHandler
+ */
 const Handler = (props: { activationParams: IActivationProps }) => {
 
+  // track the content in state
   const [content, setContent] = useState<string>(props.activationParams.content);
 
+  // track if there are changes to the content
   const [dirty, setDirty] = useState(false);
+
+  // track our message bar state
+  const [messageBar, setMessageBar] = useState<MessageBarState>({ show: false });
 
   // determine what action is being invoked (create/edit/preview)
   const { action } = useRouter().query;
@@ -79,8 +96,8 @@ const Handler = (props: { activationParams: IActivationProps }) => {
   }
 
   // handle close
-  function close() {
-    if (dirty && !confirm("You have unsaved changes, are you sure you want to close?")) {
+  function close(skipDirty = false) {
+    if (!skipDirty && dirty && !confirm("You have unsaved changes, are you sure you want to close?")) {
       return;
     }
     window.close();
@@ -91,27 +108,48 @@ const Handler = (props: { activationParams: IActivationProps }) => {
 
     return async () => {
 
-      const response = await fetch("/api/filehandler/save", {
-        body: JSON.stringify({
-          appId: props.activationParams.appId,
-          content: content,
-          fileUrl: props.activationParams.items[0],
-          requestId: "123",
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      });
+      // let them know we are doing something
+      setMessageBar({ show: true, type: MessageBarType.info, message: "Saving Changes..." });
 
-      if (response.ok) {
-        setDirty(false);
-      }
+      try {
+        const response = await fetch("/api/filehandler/save", {
+          body: JSON.stringify({
+            appId: props.activationParams.appId,
+            content: content,
+            fileUrl: props.activationParams.items[0],
+            requestId: v4(),
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        });
 
-      if (andClose) {
-        close();
+        if (response.ok) {
+
+          setDirty(false);
+
+          if (andClose) {
+            close(true);
+          }
+
+          // show message bar
+          setMessageBar({ show: true, type: MessageBarType.success, message: "Success: changes saved." });
+
+        } else {
+          throw Error();
+        }
+
+      } catch (e) {
+
+        // show error bar
+        setMessageBar({ show: true, type: MessageBarType.error, message: "Error: There was a problem saving your changes." });
       }
     };
+  }
+
+  function hideMessageBar(): void {
+    setMessageBar({ show: false });
   }
 
   if (action === "preview") {
@@ -151,27 +189,41 @@ const Handler = (props: { activationParams: IActivationProps }) => {
         <article>
           <h1 className="ms-fontWeight-bold ms-fontSize-28">{action} Markdown</h1>
 
-          <Stack horizontal tokens={stackTokens}>
-            <DefaultButton text="Close" allowDisabledFocus onClick={close} />
-            <PrimaryButton text="Save" allowDisabledFocus menuProps={{
-              items: [
-                {
-                  iconProps: { iconName: "Mail" },
-                  key: "save",
-                  onClick: save(false),
-                  text: "Save",
-                },
-                {
-                  iconProps: { iconName: "Mail" },
-                  key: "saveandclose",
-                  onClick: save(true),
-                  text: "Save & Close",
-                },
-              ],
-            }} />
-          </Stack>
-
           <div className="ms-Grid" dir="ltr">
+            <div className="ms-Grid-row">
+              <div className="ms-Grid-col ms-sm12">
+                <Stack horizontal tokens={stackTokens} className="action-buttons">
+                  <DefaultButton text="Close" allowDisabledFocus onClick={() => close()} />
+                  <PrimaryButton text="Save" allowDisabledFocus menuProps={{
+                    items: [
+                      {
+                        iconProps: { iconName: "Mail" },
+                        key: "save",
+                        onClick: save(false),
+                        text: "Save",
+                      },
+                      {
+                        iconProps: { iconName: "Mail" },
+                        key: "saveandclose",
+                        onClick: save(true),
+                        text: "Save & Close",
+                      },
+                    ],
+                  }} />
+                </Stack>
+              </div>
+            </div>
+            {messageBar.show &&
+              <div className="ms-Grid-row">
+                <div className="ms-Grid-col ms-sm12">
+                  <MessageBar actions={
+                    <div>
+                      <MessageBarButton onClick={hideMessageBar}>Close</MessageBarButton>
+                    </div>
+                  } isMultiline={false} messageBarType={messageBar.type}>{messageBar.message}</MessageBar>
+                </div>
+              </div>
+            }
             <div className="ms-Grid-row">
               <div className="ms-Grid-col ms-sm6">
                 <MonacoEditor

@@ -2,14 +2,11 @@ import { log, enter, leave } from "../logger";
 import { fetch, getHeaders, isError } from "../fetch";
 import { v4 } from "uuid";
 
-
-const dirName = ".dev-secrets";
-
 // defines the actions in our manifest
 const actions = [
     {
         "type": "newFile",
-        "url": "https: //localhost:3000/markdown/create",
+        "url": "https://localhost:3000/markdown/create",
         // tslint:disable-next-line: object-literal-sort-keys
         "availableOn": {
             "file": {
@@ -22,7 +19,7 @@ const actions = [
     },
     {
         "type": "open",
-        "url": "https: //localhost:3000/markdown/edit",
+        "url": "https://localhost:3000/markdown/edit",
         // tslint:disable-next-line: object-literal-sort-keys
         "availableOn": {
             "file": {
@@ -37,7 +34,7 @@ const actions = [
     },
     {
         "type": "preview",
-        "url": "https: //localhost:3000/markdown/preview",
+        "url": "https://localhost:3000/markdown/preview",
         // tslint:disable-next-line: object-literal-sort-keys
         "availableOn": {
             "file": {
@@ -78,7 +75,7 @@ const defaultManifest = {
         },
         {
             "key": "fileTypeDisplayName",
-            "value": "Contso Markdown",
+            "value": "Contoso Markdown",
         },
         {
             "key": "fileTypeIcon",

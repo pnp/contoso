@@ -1,3 +1,6 @@
+import { NextApiRequest } from "next";
+import { Session } from "next-iron-session";
+
 export interface IActivationProps {
     appId: string;
     client: string;
@@ -9,4 +12,8 @@ export interface IActivationProps {
     items: string[];
     userId: string;
     content: string;
+}
+
+export interface NextApiRequestWithSession extends NextApiRequest {
+    session: Session;
 }

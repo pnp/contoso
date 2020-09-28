@@ -6,66 +6,88 @@ import { fromBase64, readRequestBody, toBase64 } from "./utils";
 import { parse } from "url";
 import { parse as parseQuery } from "querystring";
 
+/**
+ * Shape of the stored login state
+ */
 export interface ILoginState {
     target: string;
     activationParams: IActivationProps;
 }
 
+/**
+ * Shape of the stored session state
+ */
 export interface SessionState {
     auth?: {
         token: string;
         expires: Date;
-    },
+    };
 }
 
 const isProd = process.env.NODE_ENV === "production";
 export const sessionKey = "session";
 
+/**
+ * Factory to create a configured ConfidentialClientApplication
+ */
 export async function authClientFactory(): Promise<ConfidentialClientApplication> {
-    // req.url
     let tenantId = "";
     let clientId = "";
     let clientSecret = "";
 
     if (isProd) {
+        // for production we should get these values from the running environment
         tenantId = process.env.AAD_MSAL_AUTH_TENANT_ID;
         clientId = process.env.AAD_MSAL_AUTH_ID;
         clientSecret = process.env.AAD_MSAL_AUTH_SECRET;
     } else {
+        // for dev we get them from our local dev secrets, created using by `npm run dev-setup`
         const { appId, appSecret, appTenantId } = await import("../../.local-dev-secrets/settings");
-        tenantId = appTenantId
+        tenantId = appTenantId;
         clientId = appId;
         clientSecret = appSecret;
     }
 
-    // for production you should target the common endpoint
+    // for production you may target the common endpoint for multi-tenant apps
+    // for dev we target a single tenant for simplicity
     const authority = `https://login.microsoftonline.com/${tenantId}`;
 
+    // produce our configured client application
     return new ConfidentialClientApplication({
         auth: {
+            authority: authority,
             clientId: clientId,
             clientSecret: clientSecret,
-            authority: authority,
-        }
+        },
     });
 }
 
-export async function withInit(req: IncomingMessage & { session: Session }, res: ServerResponse): Promise<[string, IActivationProps] | never> {
+/**
+ * Initializes the values required for the file handler to operate, including an access token at parsing the activation props
+ * 
+ * @param req 
+ * @param res 
+ */
+export async function initHandler(req: IncomingMessage & { session: Session }, res: ServerResponse): Promise<[string, IActivationProps] | never> {
 
+    // get our request query
     const query = parseQuery(parse(req.url).query);
 
     if (query.token) {
         // this is a redirect from login so we need to setup our session
 
+        // the state is created by us and passed to AAD which passes it back to help with stateless application
+        // we could store it in the session, but iron session uses cookies and the activation params may exceed
+        // the maximum cookie size
         const loginState: ILoginState = JSON.parse(fromBase64(query.state as string));
 
+        // constuct and save our session data
         const sessionData: SessionState = {
             auth: {
-                token: query.token as string,
                 expires: new Date(query.expiresOn as string),
-            }
-        }
-
+                token: query.token as string,
+            },
+        };
         req.session.set(sessionKey, sessionData);
         await req.session.save();
 
@@ -76,11 +98,11 @@ export async function withInit(req: IncomingMessage & { session: Session }, res:
 
     if (session === undefined || typeof session.auth === undefined || session.auth.expires < new Date()) {
 
-        // we assume this is the initial request to the app and we need to read the activation params from the
-        // request body
-        const buffer = await readRequestBody(req);
+        // this is the initial request to the app and we need to read the activation params from the
+        // request body to properly initialize the application
+        const body = await readRequestBody(req);
 
-        const activationParams: Partial<IActivationProps> = buffer.split("&").map(v => v.split("=")).reduce((prev: Partial<IActivationProps>, curr: any[]) => {
+        const activationParams: Partial<IActivationProps> = body.split("&").map(v => v.split("=")).reduce((prev: Partial<IActivationProps>, curr: any[]) => {
             prev[curr[0]] = curr[0] === "items" ? JSON.parse(decodeURIComponent(curr[1])) : curr[1];
             return prev;
         }, {});
@@ -90,14 +112,16 @@ export async function withInit(req: IncomingMessage & { session: Session }, res:
 
         const authApp = await authClientFactory();
 
+        // send the request to get the auth code url to which we will send the user
         const authUrl = await authApp.getAuthCodeUrl({
-            scopes: ["openid", "Files.ReadWrite.All"],
-            redirectUri: "https://localhost:3000/api/auth/login",
-            state,
-            loginHint: decodeURIComponent(activationParams.userId),
             domainHint: activationParams.domainHint,
+            loginHint: decodeURIComponent(activationParams.userId),
+            redirectUri: "https://localhost:3000/api/auth/login",
+            scopes: ["openid", "Files.ReadWrite.All"],
+            state,
         });
 
+        // redirect this request to the url from the authenticaiton app
         res.setHeader("location", authUrl);
         res.statusCode = 302;
         res.end();

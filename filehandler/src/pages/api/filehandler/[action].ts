@@ -1,9 +1,11 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { withInit } from "../../../lib/withInit";
+import { NextApiResponse } from "next";
 import { DriveItem } from "@microsoft/microsoft-graph-types";
-import { withSession } from "../../../lib/withSession";
-import { Session } from "next-iron-session";
 
+import { NextApiRequestWithSession } from "../../../lib/types";
+import { initHandler } from "../../../lib/initHandler";
+import { withSession } from "../../../lib/withSession";
+
+// next API config (see: https://nextjs.org/docs/api-routes/api-middlewares#custom-config)
 export const config = {
     api: {
         bodyParser: {
@@ -12,7 +14,14 @@ export const config = {
     },
 };
 
-const handler = async (req: NextApiRequest & { session: Session }, res: NextApiResponse) => {
+/**
+ * Our API handler method to process incoming API requests
+ * This matches in nextjs any call to /api/filehandler/[action]
+ * 
+ * @param req The incoming API request
+ * @param res 
+ */
+const handler = async (req: NextApiRequestWithSession, res: NextApiResponse) => {
 
     const { action } = req.query;
 
@@ -26,12 +35,21 @@ const handler = async (req: NextApiRequest & { session: Session }, res: NextApiR
 };
 export default withSession(handler);
 
-async function handleSave(req: NextApiRequest & { session: Session }, res: NextApiResponse): Promise<void> {
+/**
+ * Handles saving the file contents back to the sever
+ * 
+ * @param req 
+ * @param res 
+ */
+async function handleSave(req: NextApiRequestWithSession, res: NextApiResponse): Promise<void> {
 
+    // get the information posted to us from the /pages/markdown/[action]
     const { content, fileUrl, requestId }: { content: string; fileUrl: string; requestId: string; } = req.body;
 
-    const [token] = await withInit(req as any, res);
+    // get our token from the session
+    const [token] = await initHandler(req as any, res);
 
+    // we validate our inputs
     if (typeof content === "undefined" || content.length < 1) {
         return res.status(400).end();
     }
@@ -40,6 +58,11 @@ async function handleSave(req: NextApiRequest & { session: Session }, res: NextA
         return res.status(400).end();
     }
 
+    if (typeof token === "undefined") {
+        return res.status(500).end("No security token found.");
+    }
+
+    // we need to load up some details about the file to enable us to save it properly via the Microsoft Graph
     const itemInfoResponse = await fetch(fileUrl, {
         headers: {
             "authorization": `Bearer ${token}`,
@@ -48,21 +71,24 @@ async function handleSave(req: NextApiRequest & { session: Session }, res: NextA
     if (!itemInfoResponse.ok) {
         const errInfo = await itemInfoResponse.clone().text();
         console.error(errInfo);
-        return res.status(401).end("Error getting authentication token.");
+        return res.status(500).end("Error getting item details before save.");
     }
 
     const itemInfo: DriveItem = await itemInfoResponse.clone().json();
 
+    // construct a graph url to PUT our changes
     const contentUrl = `https://graph.microsoft.com/v1.0/drives/${itemInfo.parentReference.driveId}/items/${itemInfo.id}/content`;
 
+    // update the file via Graph
     const updateResult = await fetch(contentUrl, {
         body: Buffer.from(content),
-        method: "PUT",
         headers: {
             "authorization": `Bearer ${token}`,
         },
+        method: "PUT",
     });
 
+    // report on any errors
     if (!updateResult.ok) {
         const err = await updateResult.clone().text();
         // TODO:: log errors in telemetry
@@ -70,5 +96,6 @@ async function handleSave(req: NextApiRequest & { session: Session }, res: NextA
         return res.status(updateResult.status).end(`Update failed. Request Id: ${requestId}`);
     }
 
+    // if it all went well we return a 200 from the api
     res.status(200).end();
 }

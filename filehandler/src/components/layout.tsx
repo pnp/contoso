@@ -1,9 +1,7 @@
 import Head from "next/head";
-// import Link from "next/link";
 import styles from "./layout.module.css";
-// import utilStyles from "../styles/utils.module.css";
 
-export const siteTitle = "CONTSO File Handler Sample";
+export const siteTitle = "CONTOSO: File Handler";
 
 export interface ILayoutProps {
   children: React.ReactNode;
