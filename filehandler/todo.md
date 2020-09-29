@@ -34,6 +34,7 @@ Code tours
 - Handle redirect
 - Have a respources md that has a section of links for each tour. 
 - setting up fluent in nextjs
+- 
 
 Write up of experience to inform future design. 
 -Auth

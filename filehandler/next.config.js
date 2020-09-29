@@ -19,11 +19,6 @@ module.exports = withCSS(withFonts({
       },
     });
 
-    // config.plugins = config.plugins.filter(plugin => {
-    //   if (plugin.constructor.name === 'ForkTsCheckerWebpackPlugin') return false;
-    //   return true;
-    // });
-
     config.plugins.push(new MonacoWebpackPlugin({
       languages: ["markdown", "javascript", "typescript"],
       filename: "static/[name].worker.js",
