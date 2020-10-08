@@ -2,7 +2,7 @@
 
 - [X] file operations
 - [ ] ~~improve side-load page~~
-- [ ] add icons as listed in manifest
+- [X] add icons as listed in manifest
 - [ ] update readme
 - [ ] dev docs
 - [ ] code comments
@@ -12,6 +12,7 @@
 - [X] fix local setup launch urls 
 - [ ] don't expose token in query string
 - [X] local dev setup
+- [ ] fix display names for actions in manifest
 
 # Nice
 
@@ -30,10 +31,10 @@
 
 Code tours
 - Making Monaco editor work in next
-- Auth
-- Handle redirect
+- Auth - Handle redirect
 - Have a respources md that has a section of links for each tour. 
 - setting up fluent in nextjs
+- Handler mechanics
 - 
 
 Write up of experience to inform future design. 
