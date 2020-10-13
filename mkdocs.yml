@@ -6,6 +6,7 @@ nav:
   - Home: 'index.md'
   - 'File Handler':
     - 'Overview': 'file-handler/index.md'
+    - 'Tech Details': 'file-handler/tech-details.md'
 
 theme:
   name: 'material'

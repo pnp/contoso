@@ -27,7 +27,7 @@ const WriteLocalSSLCerts = (folderPath: string) => {
         "-passout",
         `pass:${passphrase}`,
         "-subj",
-        "'/C=US/ST=Washington/L=Seattle/CN=localhost'",
+        "/C=US/ST=Washington/L=Seattle/CN=localhost",
     ]);
 
     execFileSync("openssl", [

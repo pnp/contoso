@@ -5,7 +5,7 @@
 }
 
 .md-header{
-    height: 75px;
+    height: 100px;
 }
 
 .md-container{
@@ -20,6 +20,7 @@
     width: 100% !important;
     height: auto !important;
     margin-top: -0.25em;
+    filter: none !important;
 }
 
 .md-footer {
@@ -30,4 +31,9 @@
  .md-nav--primary .md-nav__title--site .md-nav__button {
      width: 150px;
  }
+
+}
+
+img {
+    filter: drop-shadow(5px 5px 4px #cecece);
 }

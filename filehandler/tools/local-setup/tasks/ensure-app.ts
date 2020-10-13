@@ -7,7 +7,7 @@ import {
     PasswordCredential as IPasswordCredential,
 } from "@microsoft/microsoft-graph-types";
 
-const appDisplayName = "Contoso-FileHandler-LocalDev";
+const appDisplayName = "Contoso-FileHandler-Markdown";
 
 const EnsureApp = async (token: string): Promise<{ displayName: string, appId: string, appSecret?: string, id: string, created: boolean }> => {
 

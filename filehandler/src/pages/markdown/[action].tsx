@@ -234,6 +234,7 @@ const Handler = (props: { activationParams: IActivationProps }) => {
                   language="markdown"
                   options={{
                     selectOnLineNumbers: true,
+                    wordWrap:"on",
                   }}
                   theme="vs" />
               </div>
