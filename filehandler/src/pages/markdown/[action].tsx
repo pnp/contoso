@@ -46,6 +46,11 @@ const getServerSidePropsHandler: GetServerSideProps = async ({ req, res }) => {
 
   const [token, activationParams] = await initHandler(req as any, res);
 
+  if (token === null) {
+    // return nothing if we don't have a token, we are likely doing a redirect
+    return { props: {} };
+  }
+
   // read the file from the url supplied via the activation params
   // we do this on the server due to cors and redirect issues when trying to do it on the client
   const response = await fetch(`${activationParams.items[0]}/content`, {
@@ -71,6 +76,10 @@ export const getServerSideProps = withSession(getServerSidePropsHandler);
  * @param props supplied by getServerSidePropsHandler
  */
 const Handler = (props: { activationParams: IActivationProps }) => {
+
+  if (!props.activationParams) {
+    return;
+  }
 
   // track the content in state
   const [content, setContent] = useState<string>(props.activationParams.content);
@@ -234,7 +243,7 @@ const Handler = (props: { activationParams: IActivationProps }) => {
                   language="markdown"
                   options={{
                     selectOnLineNumbers: true,
-                    wordWrap:"on",
+                    wordWrap: "on",
                   }}
                   theme="vs" />
               </div>

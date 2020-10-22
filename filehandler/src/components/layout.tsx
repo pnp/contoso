@@ -8,6 +8,11 @@ export interface ILayoutProps {
   home?: boolean;
 }
 
+/**
+ * Main page layout container
+ * 
+ * @param props 
+ */
 export default function Layout(props: ILayoutProps) {
 
   const { children } = props;

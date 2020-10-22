@@ -59,7 +59,7 @@ async function handleSave(req: NextApiRequestWithSession, res: NextApiResponse):
     }
 
     if (typeof token === "undefined") {
-        return res.status(500).end("No security token found.");
+        return res.status(500).end("No security token.");
     }
 
     // we need to load up some details about the file to enable us to save it properly via the Microsoft Graph

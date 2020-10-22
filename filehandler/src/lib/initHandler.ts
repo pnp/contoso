@@ -81,7 +81,7 @@ export async function initHandler(req: IncomingMessage & { session: Session }, r
         // the maximum cookie size
         const loginState: ILoginState = JSON.parse(fromBase64(query.state as string));
 
-        // constuct and save our session data
+        // construct and save our session data
         const sessionData: SessionState = {
             auth: {
                 expires: new Date(query.expiresOn as string),
@@ -121,10 +121,13 @@ export async function initHandler(req: IncomingMessage & { session: Session }, r
             state,
         });
 
-        // redirect this request to the url from the authenticaiton app
-        res.setHeader("location", authUrl);
-        res.statusCode = 302;
+        // redirect this request to the url from the authentication app
+        res.writeHead(302, {
+            location: authUrl,
+        });
         res.end();
+
+        return [null, null];
 
     } else {
 

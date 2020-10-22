@@ -42,7 +42,7 @@ async function handleLogin(req: NextApiRequestWithSession, res: NextApiResponse)
 
     const authApp = await authClientFactory();
 
-    // using the code returned from the server we azquire an access token
+    // using the code returned from the server we acquire an access token
     const tokenResponse = await authApp.acquireTokenByCode({
         code: req.query.code as string,
         redirectUri: "https://localhost:3000/api/auth/login",
