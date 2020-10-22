@@ -1,20 +1,6 @@
 # Contoso: Markdown FileHandler
 
-## Docs
-
-## Scenario
-
-## Highlights
-
-- iron session
-- nextjs
-- monaco editor
-- msal node auth
-- 
-
-## Code Tours
-
-
+This file handler sample uses Nextjs, MSAL, the Monaco editor, and React to demonstrate a Markdown [file handler](https://docs.microsoft.com/en-us/onedrive/developer/file-handlers). You can use the code tours for introductions to various pieces of the functionality, or follow the dev setup guide below to begin testing.
 
 ## Dev Setup
 
@@ -43,7 +29,11 @@ You must first setup an application that will be used to sign you in and modify 
   - supply client id and secret when prompted
   - follow the on screen prompts to complete the device-code auth flow
 
+> It currently takes 24-48 hours for new file handlers to appear in the UI. You can [follow these steps for clearing the cache](https://docs.microsoft.com/en-us/onedrive/developer/file-handlers/reset-cache) to speed this up for development.
+
 5. Once setup you can optionally delete the registration helper application, or leave it in place for future use.
+
+6. Run `npm run dev` and launch the file handler from within OneDrive or a SharePoint document library on a __.md__ file.
 
 
 
