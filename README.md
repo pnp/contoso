@@ -1,10 +1,14 @@
 # Contoso
 
-This repository contains ISV focused reference samples used in conversations with our partners. We encourage you to examine, try-out, and as questions about the samples contained here. [Read more in our docs.](https://pnp.github.io/contoso/)
+This repository contains ISV focused reference samples and resources used in conversations with our partners. We encourage you to examine, try-out, and as questions about the samples contained here. [Read more in our docs.](https://pnp.github.io/contoso/)
 
 ## Available Samples
 
 - [File Handler](./filehandler/README.md)
+
+## Available Resources
+
+- [ISV Pitch Deck](./resources/ISV%20Pitch%20Deck/readme.md)
 
 ## Contributing
 
