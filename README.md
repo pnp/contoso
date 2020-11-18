@@ -8,7 +8,7 @@ This repository contains ISV focused reference samples and resources used in con
 
 ## Available Resources
 
-- [ISV Pitch Deck](./resources/ISV%20Pitch%20Deck/readme.md)
+- [ISV Pitch Deck](./resources/ISV%20Pitch%20Deck)
 
 ## Contributing
 
