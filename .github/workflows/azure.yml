@@ -23,6 +23,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: './filehandler'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '12.x'                # set this to the node version to use
   IRON_SESSION_PASSWORD: ${{ secrets.IRON_SESSION_PASSWORD }}
+  NODE_ENV: 'production'
 
 jobs:
   build-and-deploy:
