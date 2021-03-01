@@ -42,10 +42,12 @@ export async function authClientFactory(): Promise<ConfidentialClientApplication
         clientSecret = process.env.AAD_MSAL_AUTH_SECRET;
     } else {
         // for dev we get them from our local dev secrets, created using by `npm run dev-setup`
-        const { appId, appSecret, appTenantId } = await import("../../.local-dev-secrets/settings");
-        tenantId = appTenantId;
-        clientId = appId;
-        clientSecret = appSecret;
+        try {
+            const { appId, appSecret, appTenantId } = await import("../../.local-dev-secrets/settings");
+            tenantId = appTenantId;
+            clientId = appId;
+            clientSecret = appSecret;
+        } catch { }
     }
 
     // for production you may target the common endpoint for multi-tenant apps
