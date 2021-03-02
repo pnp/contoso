@@ -33,7 +33,22 @@ You must first setup an application that will be used to sign you in and modify 
 
 5. Once setup you can optionally delete the registration helper application, or leave it in place for future use.
 
-6. Run `npm run dev` and launch the file handler from within OneDrive or a SharePoint document library on a __.md__ file.
+6. Running the `dev-setup` command in step 4 generates an ".env.local" file in the root of the filehandler directory. Review the values and ensure it was created correctly. It should appear similar to below:
+
+```
+IRON_SESSION_PASSWORD='{anything you want}'
+NODE_ENV='production'
+AAD_MSAL_AUTH_TENANT_ID="{app tenant id from step 4}"
+AAD_MSAL_AUTH_ID="{app client id from step 4}"
+AAD_MSAL_AUTH_SECRET="{app secret from step 4}"
+FILEHANDLER_SITE_HOST_URL="https://localhost:3000"
+```
+
+> This file is excluded from git via .gitignore so it is safe for your local testing secrets
+
+7. Run `npm run dev` and launch the file handler from within OneDrive or a SharePoint document library on a __.md__ file.
+
+## Production Deployment
 
 
 

@@ -39,7 +39,7 @@ export default async function Setup(workingDir = process.env.INIT_CWD) {
         await InjectManifest(token, id);
 
         // write the local settings file that will be used by the webserver to auth
-        WriteLocalSettings(secretsDir, tenantId, appId, appSecret);
+        WriteLocalSettings(workingDir, tenantId, appId, appSecret);
     }
 
     // we need to create the ssl files in the .local-dev-secrets folder

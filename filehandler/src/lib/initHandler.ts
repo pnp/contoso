@@ -24,7 +24,6 @@ export interface SessionState {
     };
 }
 
-const isProd = process.env.NODE_ENV === "production";
 export const sessionKey = "session";
 
 /**
@@ -35,20 +34,10 @@ export async function authClientFactory(): Promise<ConfidentialClientApplication
     let clientId = "";
     let clientSecret = "";
 
-    // const settingsImportPath = isProd ? "" : "../../.local-dev-secrets/settings";
-
-    if (isProd) {
-        // for production we should get these values from the running environment
-        tenantId = process.env.AAD_MSAL_AUTH_TENANT_ID;
-        clientId = process.env.AAD_MSAL_AUTH_ID;
-        clientSecret = process.env.AAD_MSAL_AUTH_SECRET;
-    } else {
-        // for dev we get them from our local dev secrets, created using by `npm run dev-setup`
-        const { appId, appSecret, appTenantId } = await import("../../.local-dev-secrets/settings");
-        tenantId = appTenantId;
-        clientId = appId;
-        clientSecret = appSecret;
-    }
+    // for production we should get these values from the running environment
+    tenantId = process.env.AAD_MSAL_AUTH_TENANT_ID;
+    clientId = process.env.AAD_MSAL_AUTH_ID;
+    clientSecret = process.env.AAD_MSAL_AUTH_SECRET;
 
     // for production you may target the common endpoint for multi-tenant apps
     // for dev we target a single tenant for simplicity

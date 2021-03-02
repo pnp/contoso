@@ -9,11 +9,14 @@ const WriteLocalSettings = async (path: string, tenantId: string, appId: string,
     log(`Writing settings file.`);
 
     const file = [];
-    file.push(`export const appTenantId = "${tenantId}";`);
-    file.push(`export const appId = "${appId}";`);
-    file.push(`export const appSecret = "${appSecret}";`);
+    file.push(`IRON_SESSION_PASSWORD='password'`);
+    file.push(`NODE_ENV='production'`);
+    file.push(`AAD_MSAL_AUTH_TENANT_ID="${tenantId}"`);
+    file.push(`AAD_MSAL_AUTH_ID="${appId}"`);
+    file.push(`AAD_MSAL_AUTH_SECRET="${appSecret}"`);
+    file.push(`FILEHANDLER_SITE_HOST_URL="https://localhost:3000"`);
 
-    writeFileSync(resolve(path, "settings.ts"), file.join("\n") + "\n");
+    writeFileSync(resolve(path, ".env.local"), file.join("\n") + "\n");
 
     log(`Wrote settings file.`);
 
