@@ -50,8 +50,8 @@ jobs:
         echo AAD_MSAL_AUTH_TENANT_ID='${{ secrets.AAD_MSAL_AUTH_TENANT_ID }}' >> ${{ env.ENV_FILE_NAME }}
         echo AAD_MSAL_AUTH_ID='${{ secrets.AAD_MSAL_AUTH_ID }}' >> ${{ env.ENV_FILE_NAME }}
         echo AAD_MSAL_AUTH_SECRET='${{ secrets.AAD_MSAL_AUTH_SECRET }}' >> ${{ env.ENV_FILE_NAME }}
-        cat ${{ env.ENV_FILE_NAME }}
-        dir      
+        echo FILEHANDLER_SITE_HOST_URL='${{ secrets.FILEHANDLER_SITE_HOST_URL }}' >> ${{ env.ENV_FILE_NAME }}
+        cat ${{ env.ENV_FILE_NAME }}    
     - name: npm install, build, remove node_modules
       run: |
         # Build and test the project, then
@@ -66,7 +66,7 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-    - name: list dir
+    - name: 'debug: list dir'
       if: always()
       run: |
         # Build and test the project, then

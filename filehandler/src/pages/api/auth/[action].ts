@@ -45,7 +45,7 @@ async function handleLogin(req: NextApiRequestWithSession, res: NextApiResponse)
     // using the code returned from the server we acquire an access token
     const tokenResponse = await authApp.acquireTokenByCode({
         code: req.query.code as string,
-        redirectUri: "https://localhost:3000/api/auth/login",
+        redirectUri: `${process.env.FILEHANDLER_SITE_HOST_URL}/api/auth/login`,
         scopes: ["openid", "Files.ReadWrite.All"],
     });
 

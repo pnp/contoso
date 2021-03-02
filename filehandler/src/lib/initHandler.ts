@@ -35,7 +35,7 @@ export async function authClientFactory(): Promise<ConfidentialClientApplication
     let clientId = "";
     let clientSecret = "";
 
-    const settingsImportPath = isProd ? "" : "../../.local-dev-secrets/settings";
+    // const settingsImportPath = isProd ? "" : "../../.local-dev-secrets/settings";
 
     if (isProd) {
         // for production we should get these values from the running environment
@@ -44,7 +44,7 @@ export async function authClientFactory(): Promise<ConfidentialClientApplication
         clientSecret = process.env.AAD_MSAL_AUTH_SECRET;
     } else {
         // for dev we get them from our local dev secrets, created using by `npm run dev-setup`
-        const { appId, appSecret, appTenantId } = await import(settingsImportPath);
+        const { appId, appSecret, appTenantId } = await import("../../.local-dev-secrets/settings");
         tenantId = appTenantId;
         clientId = appId;
         clientSecret = appSecret;
@@ -118,7 +118,7 @@ export async function initHandler(req: IncomingMessage & { session: Session }, r
         const authUrl = await authApp.getAuthCodeUrl({
             domainHint: activationParams.domainHint,
             loginHint: decodeURIComponent(activationParams.userId),
-            redirectUri: "https://localhost:3000/api/auth/login",
+            redirectUri: `${process.env.FILEHANDLER_SITE_HOST_URL}/api/auth/login`,
             scopes: ["openid", "Files.ReadWrite.All"],
             state,
         });
