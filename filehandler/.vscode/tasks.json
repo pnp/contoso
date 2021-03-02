@@ -50,5 +50,26 @@
                 "showReuseMessage": false
             }
         },
+        {
+            "label": "test-production-build",
+            "type": "shell",
+            "command": "npm run build",
+            "args": [],
+            "isBackground": true,
+            "problemMatcher": [],
+            "options": {
+                "env": {
+                    "IRON_SESSION_PASSWORD": "password",
+                    "NODE_ENV": "production"
+                }
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false
+            }
+        }
     ]
 }
