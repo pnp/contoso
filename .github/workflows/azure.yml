@@ -36,16 +36,16 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: Create ${{ env.ENV_FILE_NAME }} file
-        run: |
-          cd filehandler
-          touch ${{ env.ENV_FILE_NAME }}
-          echo IRON_SESSION_PASSWORD='${{ secrets.IRON_SESSION_PASSWORD }}' >> ${{ env.ENV_FILE_NAME }}
-          echo NODE_ENV='production' >> ${{ env.ENV_FILE_NAME }}
-          echo AAD_MSAL_AUTH_TENANT_ID='${{ secrets.AAD_MSAL_AUTH_TENANT_ID }}' >> ${{ env.ENV_FILE_NAME }}
-          echo AAD_MSAL_AUTH_ID='${{ secrets.AAD_MSAL_AUTH_ID }}' >> ${{ env.ENV_FILE_NAME }}
-          echo AAD_MSAL_AUTH_SECRET='${{ secrets.AAD_MSAL_AUTH_SECRET }}' >> ${{ env.ENV_FILE_NAME }}
-          cat ${{ env.ENV_FILE_NAME }}
-          dir
+      run: |
+        cd filehandler
+        touch ${{ env.ENV_FILE_NAME }}
+        echo IRON_SESSION_PASSWORD='${{ secrets.IRON_SESSION_PASSWORD }}' >> ${{ env.ENV_FILE_NAME }}
+        echo NODE_ENV='production' >> ${{ env.ENV_FILE_NAME }}
+        echo AAD_MSAL_AUTH_TENANT_ID='${{ secrets.AAD_MSAL_AUTH_TENANT_ID }}' >> ${{ env.ENV_FILE_NAME }}
+        echo AAD_MSAL_AUTH_ID='${{ secrets.AAD_MSAL_AUTH_ID }}' >> ${{ env.ENV_FILE_NAME }}
+        echo AAD_MSAL_AUTH_SECRET='${{ secrets.AAD_MSAL_AUTH_SECRET }}' >> ${{ env.ENV_FILE_NAME }}
+        cat ${{ env.ENV_FILE_NAME }}
+        dir
     - name: npm install, build, and test
       run: |
         # Build and test the project, then
