@@ -58,7 +58,7 @@ jobs:
         npm install --production=false
         npm run build
         find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
-        npm install
+        npm install next@9.5.3
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
