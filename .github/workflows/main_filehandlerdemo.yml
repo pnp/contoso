@@ -55,9 +55,10 @@ jobs:
       run: |
         # Build and test the project, then
         # deploy to Azure Web App.
-        npm install
+        npm install --production=false
         npm run build
         find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
+        npm install
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
