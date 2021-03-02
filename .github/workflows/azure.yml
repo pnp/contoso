@@ -29,6 +29,9 @@ jobs:
     name: Build and Deploy
     runs-on: ubuntu-latest
     environment: production
+    defaults:
+      run:
+        working-directory: filehandler
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ env.NODE_VERSION }}
@@ -36,7 +39,6 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: Create ${{ env.ENV_FILE_NAME }} file
-      working-directory: filehandler
       run: |
         touch ${{ env.ENV_FILE_NAME }}
         echo IRON_SESSION_PASSWORD='${{ secrets.IRON_SESSION_PASSWORD }}' >> ${{ env.ENV_FILE_NAME }}
@@ -47,7 +49,6 @@ jobs:
         cat ${{ env.ENV_FILE_NAME }}
         dir      
     - name: npm install, build, and test
-      working-directory: filehandler
       run: |
         # Build and test the project, then
         # deploy to Azure Web App.
@@ -55,11 +56,10 @@ jobs:
         npm run build      
     - name: list dir
       if: always()
-      working-directory: filehandler
       run: |
         # Build and test the project, then
         # deploy to Azure Web App.
-        dir /S /B
+        dir . /S /B
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
