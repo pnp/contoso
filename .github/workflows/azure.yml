@@ -36,8 +36,8 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: Create ${{ env.ENV_FILE_NAME }} file
+      working-directory: filehandler
       run: |
-        cd filehandler
         touch ${{ env.ENV_FILE_NAME }}
         echo IRON_SESSION_PASSWORD='${{ secrets.IRON_SESSION_PASSWORD }}' >> ${{ env.ENV_FILE_NAME }}
         echo NODE_ENV='production' >> ${{ env.ENV_FILE_NAME }}
@@ -45,19 +45,20 @@ jobs:
         echo AAD_MSAL_AUTH_ID='${{ secrets.AAD_MSAL_AUTH_ID }}' >> ${{ env.ENV_FILE_NAME }}
         echo AAD_MSAL_AUTH_SECRET='${{ secrets.AAD_MSAL_AUTH_SECRET }}' >> ${{ env.ENV_FILE_NAME }}
         cat ${{ env.ENV_FILE_NAME }}
-        dir
+        dir      
     - name: npm install, build, and test
+      working-directory: filehandler
       run: |
         # Build and test the project, then
         # deploy to Azure Web App.
-        cd filehandler
         npm install
-        npm run build
+        npm run build      
     - name: list dir
+      if: always()
+      working-directory: filehandler
       run: |
         # Build and test the project, then
         # deploy to Azure Web App.
-        cd filehandler
         dir /S/B
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
