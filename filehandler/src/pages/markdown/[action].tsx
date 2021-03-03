@@ -123,7 +123,6 @@ const Handler = (props: { activationParams: IActivationProps }) => {
       try {
         const response = await fetch("/api/filehandler/save", {
           body: JSON.stringify({
-            appId: props.activationParams.appId,
             content: content,
             fileUrl: props.activationParams.items[0],
             requestId: v4(),

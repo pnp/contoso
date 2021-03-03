@@ -25,7 +25,6 @@ export interface SessionState {
 }
 
 export const sessionKey = "session";
-export const session
 
 /**
  * Factory to create a configured ConfidentialClientApplication
@@ -35,7 +34,6 @@ export async function authClientFactory(): Promise<ConfidentialClientApplication
     let clientId = "";
     let clientSecret = "";
 
-    // for production we should get these values from the running environment
     tenantId = process.env.AAD_MSAL_AUTH_TENANT_ID;
     clientId = process.env.AAD_MSAL_AUTH_ID;
     clientSecret = process.env.AAD_MSAL_AUTH_SECRET;
@@ -99,10 +97,12 @@ export async function initHandler(req: IncomingMessage & { session: Session }, r
             return prev;
         }, {});
 
-        req.session.set()
+        // we want to reduce what we keep in the state to only what we need:
 
         // we will send this state to the server and get it back
-        const state = toBase64(JSON.stringify(<ILoginState>{ target: req.url, activationParams }));
+        const state = toBase64(JSON.stringify(<ILoginState>{ target: req.url, activationParams: {
+            items: activationParams.items,
+        } }));
 
         const authApp = await authClientFactory();
 
