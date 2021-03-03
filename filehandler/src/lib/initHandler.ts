@@ -111,7 +111,7 @@ export async function initHandler(req: IncomingMessage & { session: Session }, r
             domainHint: activationParams.domainHint,
             loginHint: decodeURIComponent(activationParams.userId),
             redirectUri: `${process.env.FILEHANDLER_SITE_HOST_URL}/api/auth/login`,
-            scopes: ["openid", "Files.ReadWrite.All"],
+            scopes: ["openid", "Files.ReadWrite.Selected"],
             state,
         });
 
