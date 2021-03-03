@@ -25,6 +25,7 @@ export interface SessionState {
 }
 
 export const sessionKey = "session";
+export const session
 
 /**
  * Factory to create a configured ConfidentialClientApplication
@@ -97,6 +98,8 @@ export async function initHandler(req: IncomingMessage & { session: Session }, r
             prev[curr[0]] = curr[0] === "items" ? JSON.parse(decodeURIComponent(curr[1])) : curr[1];
             return prev;
         }, {});
+
+        req.session.set()
 
         // we will send this state to the server and get it back
         const state = toBase64(JSON.stringify(<ILoginState>{ target: req.url, activationParams }));
