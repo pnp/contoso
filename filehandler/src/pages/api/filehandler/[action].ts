@@ -30,7 +30,9 @@ const handler = async (req: NextApiRequestWithSession, res: NextApiResponse) => 
     switch (action) {
         case "save":
             try {
+                console.log("Entering handleSave");
                 await handleSave(req, res);
+                console.log("Leaving handleSave");
             } catch(e) {
                 res.status(500).end(`Error in save action: ${e.message || e}`);
             }            
@@ -51,6 +53,8 @@ async function handleSave(req: NextApiRequestWithSession, res: NextApiResponse):
 
     // get the information posted to us from the /pages/markdown/[action]
     const { content, fileUrl, requestId }: { content: string; fileUrl: string; requestId: string; } = req.body;
+
+    console.log(`content: ${content}, fileUrl: ${fileUrl}, requestId: ${requestId}`);
 
     // get our token from the session
     const [token] = await initHandler(req as any, res);
