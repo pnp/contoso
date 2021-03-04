@@ -27,7 +27,11 @@ const handler = async (req: NextApiRequestWithSession, res: NextApiResponse) => 
 
     switch (action) {
         case "save":
-            await handleSave(req, res);
+            try {
+                await handleSave(req, res);
+            } catch(e) {
+                res.status(500).end(`Error in save action: ${e.message || e}`);
+            }            
             break;
         default:
             res.status(404).end();
