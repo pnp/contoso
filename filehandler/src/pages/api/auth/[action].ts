@@ -46,7 +46,7 @@ async function handleLogin(req: NextApiRequestWithSession, res: NextApiResponse)
     const tokenResponse = await authApp.acquireTokenByCode({
         code: req.query.code as string,
         redirectUri: `${process.env.FILEHANDLER_SITE_HOST_URL}/api/auth/login`,
-        scopes: ["openid", "Files.ReadWrite.All"],
+        scopes: ["openid", "Files.ReadWrite.Selected"],
     });
 
     // with the token we redirect to the original calling page

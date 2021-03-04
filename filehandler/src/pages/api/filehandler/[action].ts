@@ -25,6 +25,8 @@ const handler = async (req: NextApiRequestWithSession, res: NextApiResponse) => 
 
     const { action } = req.query;
 
+    console.log(`In api/filehandler. Action: ${action}`);
+
     switch (action) {
         case "save":
             try {
@@ -53,6 +55,8 @@ async function handleSave(req: NextApiRequestWithSession, res: NextApiResponse):
     // get our token from the session
     const [token] = await initHandler(req as any, res);
 
+    console.log(`token: ${token}`);
+
     // we validate our inputs
     if (typeof content === "undefined" || content.length < 1) {
         return res.status(400).end();
@@ -66,6 +70,8 @@ async function handleSave(req: NextApiRequestWithSession, res: NextApiResponse):
         return res.status(500).end("No security token.");
     }
 
+    console.log("getting item info");
+
     // we need to load up some details about the file to enable us to save it properly via the Microsoft Graph
     const itemInfoResponse = await fetch(fileUrl, {
         headers: {
@@ -78,10 +84,14 @@ async function handleSave(req: NextApiRequestWithSession, res: NextApiResponse):
         return res.status(500).end("Error getting item details before save.");
     }
 
+    console.log("got item info");
+
     const itemInfo: DriveItem = await itemInfoResponse.clone().json();
 
     // construct a graph url to PUT our changes
     const contentUrl = `https://graph.microsoft.com/v1.0/drives/${itemInfo.parentReference.driveId}/items/${itemInfo.id}/content`;
+
+    console.log(`updating: ${contentUrl}`);
 
     // update the file via Graph
     const updateResult = await fetch(contentUrl, {
@@ -92,6 +102,8 @@ async function handleSave(req: NextApiRequestWithSession, res: NextApiResponse):
         method: "PUT",
     });
 
+    console.log("updated");
+
     // report on any errors
     if (!updateResult.ok) {
         const err = await updateResult.clone().text();
@@ -101,5 +113,5 @@ async function handleSave(req: NextApiRequestWithSession, res: NextApiResponse):
     }
 
     // if it all went well we return a 200 from the api
-    res.status(200).end();
+    return res.status(200).end();
 }
