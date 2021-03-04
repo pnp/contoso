@@ -59,13 +59,13 @@ jobs:
         npm install --production=false
         npm run build
         find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
-        npm install
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        startup-command: 'npm install'
     - name: 'debug: list dir'
       if: always()
       run: |
