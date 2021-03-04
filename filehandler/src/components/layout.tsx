@@ -1,10 +1,11 @@
 import Head from "next/head";
 import styles from "./layout.module.css";
+import { ReactNode } from "react";
 
 export const siteTitle = "CONTOSO: File Handler";
 
 export interface ILayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
   home?: boolean;
 }
 

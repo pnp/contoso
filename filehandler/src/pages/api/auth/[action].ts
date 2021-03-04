@@ -38,10 +38,10 @@ export default withSession(handler);
  */
 async function handleLogin(req: NextApiRequestWithSession, res: NextApiResponse): Promise<void> {
 
-    const state: ILoginState = JSON.parse(fromBase64(req.query.state as string));
+    const state: ILoginState = JSON.parse(fromBase64(req.query["state"] as string));
 
     const authApp = await authClientFactory();
-
+    
     // using the code returned from the server we acquire an access token
     const tokenResponse = await authApp.acquireTokenByCode({
         code: req.query.code as string,

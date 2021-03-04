@@ -3,7 +3,7 @@ import { Session } from "next-iron-session";
 import { ConfidentialClientApplication } from "@azure/msal-node";
 import { IActivationProps } from "./types";
 import { fromBase64, readRequestBody, toBase64 } from "./utils";
-import { parse } from "url";
+import { URL } from "url";
 import { parse as parseQuery } from "querystring";
 
 /**
@@ -61,27 +61,28 @@ export async function authClientFactory(): Promise<ConfidentialClientApplication
 export async function initHandler(req: IncomingMessage & { session: Session }, res: ServerResponse): Promise<[string, IActivationProps] | never> {
 
     // get our request query
-    const query = parseQuery(parse(req.url).query);
+    const query = (new URL(req.url, process.env.FILEHANDLER_SITE_HOST_URL)).searchParams;
+    const token = query.get("token");
 
-    if (query.token) {
+    if (token) {
         // this is a redirect from login so we need to setup our session
 
         // the state is created by us and passed to AAD which passes it back to help with stateless application
         // we could store it in the session, but iron session uses cookies and the activation params may exceed
         // the maximum cookie size
-        const loginState: ILoginState = JSON.parse(fromBase64(query.state as string));
+        const loginState: ILoginState = JSON.parse(fromBase64(query.get("state")));
 
         // construct and save our session data
         const sessionData: SessionState = {
             auth: {
-                expires: new Date(query.expiresOn as string),
-                token: query.token as string,
+                expires: new Date(query["expiresOn"] as string),
+                token,
             },
         };
         req.session.set(sessionKey, sessionData);
         await req.session.save();
 
-        return [query.token as string, loginState.activationParams];
+        return [token, loginState.activationParams];
     }
 
     const session: SessionState = req.session.get(sessionKey);

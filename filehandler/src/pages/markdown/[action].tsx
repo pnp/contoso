@@ -1,7 +1,7 @@
 /**
  * Page used to preview, edit, and create markdown files within our File Handler
  */
-import React, { useState } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next/types";

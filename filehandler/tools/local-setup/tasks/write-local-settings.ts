@@ -10,7 +10,7 @@ const WriteLocalSettings = async (path: string, tenantId: string, appId: string,
 
     const file = [];
     file.push(`IRON_SESSION_PASSWORD='password'`);
-    file.push(`NODE_ENV='production'`);
+    file.push(`NODE_ENV='development'`);
     file.push(`AAD_MSAL_AUTH_TENANT_ID="${tenantId}"`);
     file.push(`AAD_MSAL_AUTH_ID="${appId}"`);
     file.push(`AAD_MSAL_AUTH_SECRET="${appSecret}"`);

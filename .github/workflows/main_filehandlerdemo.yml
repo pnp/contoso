@@ -21,7 +21,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: filehandlerdemo    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: './filehandler'      # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '12.x'                # set this to the node version to use
+  NODE_VERSION: '14.x'                # set this to the node version to use
   ENV_FILE_NAME: ".env.local"
   NODE_ENV: "production"
 
