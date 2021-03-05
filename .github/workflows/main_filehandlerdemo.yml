@@ -51,7 +51,15 @@ jobs:
         echo AAD_MSAL_AUTH_ID='${{ secrets.AAD_MSAL_AUTH_ID }}' >> ${{ env.ENV_FILE_NAME }}
         echo AAD_MSAL_AUTH_SECRET='${{ secrets.AAD_MSAL_AUTH_SECRET }}' >> ${{ env.ENV_FILE_NAME }}
         echo FILEHANDLER_SITE_HOST_URL='${{ secrets.FILEHANDLER_SITE_HOST_URL }}' >> ${{ env.ENV_FILE_NAME }}
-        cat ${{ env.ENV_FILE_NAME }}    
+        cat ${{ env.ENV_FILE_NAME }}
+    - name: npm install, build, remove node_modules
+      run: |
+        # Build and test the project, then
+        # deploy to Azure Web App.
+        npm install --production=false
+        npm run build
+        find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
+        npm install
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
