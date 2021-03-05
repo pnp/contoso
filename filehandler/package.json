@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node ./src/dev-server/server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "node server.js",
     "lint": "tslint --project tsconfig.json",
     "dev-setup": "tsc -p ./tools/local-setup/ && node ./tools/local-setup/bin/localsetup"
   },
