@@ -4,7 +4,6 @@ import { ConfidentialClientApplication } from "@azure/msal-node";
 import { IActivationProps } from "./types";
 import { fromBase64, readRequestBody, toBase64 } from "./utils";
 import { URL } from "url";
-import { parse as parseQuery } from "querystring";
 
 /**
  * Shape of the stored login state
@@ -75,7 +74,7 @@ export async function initHandler(req: IncomingMessage & { session: Session }, r
         // construct and save our session data
         const sessionData: SessionState = {
             auth: {
-                expires: new Date(query["expiresOn"] as string),
+                expires: new Date(query.get("expiresOn")),
                 token,
             },
         };
