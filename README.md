@@ -4,7 +4,8 @@ This repository contains ISV focused reference samples and resources used in con
 
 ## Available Samples
 
-- [File Handler](./filehandler/README.md)
+- [File Handler](./filehandler/README.md) 
+- [OneDrive files](./onedrivefiles/README.md)
 
 ## Available Resources
 
