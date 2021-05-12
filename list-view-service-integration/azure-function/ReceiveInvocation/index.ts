@@ -1,38 +1,47 @@
-import { AzureFunction, Context, HttpRequest } from "@azure/functions"
+import { AzureFunction, Context } from "@azure/functions"
 import { ServiceBusClient } from "@azure/service-bus";
+import { InvocationHttpRequest, QueueMessage } from "../types";
 
-const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
-    context.log('HTTP trigger function processed a request.');
+const httpTrigger: AzureFunction = async function (context: Context, req: InvocationHttpRequest): Promise<void> {
 
-    // const name = (req.query.name || (req.body && req.body.name));
+    context.log('HTTP trigger function processing a request.');
 
-    const client = new ServiceBusClient("Endpoint=sb://contosolistview.servicebus.windows.net/;SharedAccessKeyName=clientpolicy;SharedAccessKey=k3T8ZUnPdNK0wLjJYhK05IUmhcpIqHyyGNv/leWBikU=");
-
-    const sender = client.createSender("ops");
+    const client = new ServiceBusClient(process.env["ServiceBusConnection"]);
+    const sender = client.createSender(process.env["ServiceBusQueueName"]);
 
     try {
 
+        // context.log("InvocationHttpRequest: ", req);
 
-        // TODO:: get user values
+        // Here we create our message to add to the queue
+        // for simplicity we include the auth information in the message
+        // alternatives would be writing the values to a database or other store
+        const queueMessage: QueueMessage = {
+            auth: {
+                requestBearerToken: req.headers["authorization"].split(" ")[1],
+            },
+            request: req.body,
+        }
 
         await sender.sendMessages({
-            body: "here",
+            body: JSON.stringify(queueMessage),
         });
 
         context.res = {
             status: 200,
-            body: "Operation successfully added to queue"
+            body: "Operation successfully added to queue."
         };
 
     } catch (e) {
 
-        console.error("We caught it!");
-        console.error(e);
+        context.log("Error executing httpTrigger");
 
         context.res = {
             status: 500,
             body: `There was an error adding the message to the queue: ${e.message ? e.message : e}`,
         };
+
+        context.done(e);
 
     } finally {
 

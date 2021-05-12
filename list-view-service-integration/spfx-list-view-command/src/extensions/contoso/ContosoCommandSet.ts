@@ -52,16 +52,36 @@ export default class ContosoCommandSet extends BaseListViewCommandSet<IContosoCo
         // unblock the main thread
         setTimeout(async () => {
 
-          const client = await this.context.aadHttpClientFactory.getClient("https://listviewinvoke.azurewebsites.net");
+          // TODO:: add debounce
 
-          const res = await client.post("https://listviewinvoke.azurewebsites.net/api/ReceiveInvocation", AadHttpClient.configurations.v1, {
-            body: JSON.stringify({
-              test: "value 1",
-              user: this.context.pageContext.user.email,
-            }),
-          });
+          const client = await this.context.aadHttpClientFactory.getClient("https://contoso-invoke.azurewebsites.net");
 
-          console.log(`:::>> ${this.context.pageContext.aadInfo}`);
+          let res: HttpClientResponse;
+
+          try {
+
+            res = await client.post("https://contoso-invoke.azurewebsites.net/api/ReceiveInvocation", AadHttpClient.configurations.v1, {
+              body: JSON.stringify({
+                user: this.context.pageContext.user,
+                siteId: this.context.pageContext.site.id.toString(),
+                siteUrl: this.context.pageContext.site.absoluteUrl,
+                webId: this.context.pageContext.web.id.toString(),
+                webRelUrl: this.context.pageContext.web.serverRelativeUrl,
+                webAbsUrl: this.context.pageContext.web.absoluteUrl,
+                listId: this.context.pageContext.list.id.toString(),
+                listUrl: this.context.pageContext.list.serverRelativeUrl,
+                listTitle: this.context.pageContext.list.title,
+                aadInfo: {
+                  tenantId: this.context.pageContext.aadInfo.tenantId.toString(),
+                  userId: this.context.pageContext.aadInfo.userId.toString(),
+                },
+              }),
+            });
+
+          } catch (e) {
+
+            console.error(e);
+          }
 
           if (!res.ok) {
             const resp = await res.text();
