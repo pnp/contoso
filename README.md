@@ -6,7 +6,7 @@ This repository contains ISV focused reference samples and resources used in con
 
 - [File Handler](./filehandler/README.md) 
 - [OneDrive files](./onedrivefiles/README.md)
-- [Secure Document Generation](./list-view-service-integration/README.md)
+- [Secure Document Generation](https://pnp.github.io/contoso/list-view-invoke/)
 
 ## Available Resources
 
