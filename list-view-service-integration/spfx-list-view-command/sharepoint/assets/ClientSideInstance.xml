@@ -4,6 +4,6 @@
         Title="Contoso"
         Location="ClientSideExtension.ListViewCommandSet.CommandBar"
         ListTemplateId="101"
-        Properties="{&quot;sampleTextOne&quot;:&quot;One item is selected in the list.&quot;}"
+        Properties="{&quot;apiAbsUrl&quot;:&quot;https://{app-name}.azurewebsites.net&quot;}"
         ComponentId="810e5d77-d418-4386-b67a-c3291d0bd673" />
 </Elements>

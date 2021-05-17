@@ -9,10 +9,10 @@
     "test": "gulp test"
   },
   "dependencies": {
-    "@microsoft/sp-core-library": "1.12.1",
     "@microsoft/decorators": "1.12.1",
-    "@microsoft/sp-listview-extensibility": "1.12.1",
-    "@microsoft/sp-dialog": "1.12.1"
+    "@microsoft/sp-core-library": "1.12.1",
+    "@microsoft/sp-dialog": "1.12.1",
+    "@microsoft/sp-listview-extensibility": "1.12.1"
   },
   "devDependencies": {
     "@microsoft/sp-build-web": "1.12.1",

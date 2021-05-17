@@ -36,6 +36,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: Invoca
 
         context.log("Error executing httpTrigger");
 
+        // for production likely you would not want to return actual error information, but this can help with debugging while learning
         context.res = {
             status: 500,
             body: `There was an error adding the message to the queue: ${e.message ? e.message : e}`,

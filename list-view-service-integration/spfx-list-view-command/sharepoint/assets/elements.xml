@@ -6,6 +6,6 @@
         RegistrationType="List"
         Location="ClientSideExtension.ListViewCommandSet.CommandBar"
         ClientSideComponentId="810e5d77-d418-4386-b67a-c3291d0bd673"
-        ClientSideComponentProperties="{&quot;sampleTextOne&quot;:&quot;One item is selected in the list.&quot;}">
+        ClientSideComponentProperties="{&quot;apiAbsUrl&quot;:&quot;https://{app-name}.azurewebsites.net&quot;}">
     </CustomAction>
 </Elements>

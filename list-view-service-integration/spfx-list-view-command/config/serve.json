@@ -4,25 +4,23 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://318studios.sharepoint.com/sites/dev/Shared%20Documents/Forms/AllItems.aspx",
+      "pageUrl": "https://{tenant}.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx",
       "customActions": {
         "810e5d77-d418-4386-b67a-c3291d0bd673": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
           "properties": {
-            "sampleTextOne": "One item is selected in the list",
-            "sampleTextTwo": "This command is always visible."
+            "apiAbsUrl": "https://{app-name}.azurewebsites.net"
           }
         }
       }
     },
     "contoso": {
-      "pageUrl": "https://318studios.sharepoint.com/sites/dev/Shared%20Documents/Forms/AllItems.aspx",
+      "pageUrl": "https://{tenant}.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx",
       "customActions": {
         "810e5d77-d418-4386-b67a-c3291d0bd673": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
           "properties": {
-            "sampleTextOne": "One item is selected in the list",
-            "sampleTextTwo": "This command is always visible."
+            "apiAbsUrl": "https://{app-name}.azurewebsites.net"
           }
         }
       }

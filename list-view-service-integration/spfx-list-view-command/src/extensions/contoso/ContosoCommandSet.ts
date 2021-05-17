@@ -2,7 +2,6 @@ import { override } from '@microsoft/decorators';
 import { Log } from '@microsoft/sp-core-library';
 import {
   BaseListViewCommandSet,
-  Command,
   IListViewCommandSetListViewUpdatedParameters,
   IListViewCommandSetExecuteEventParameters
 } from '@microsoft/sp-listview-extensibility';
@@ -17,50 +16,52 @@ import * as strings from 'ContosoCommandSetStrings';
  * You can define an interface to describe it.
  */
 export interface IContosoCommandSetProperties {
-  // This is an example; replace with your own properties
-  sampleTextOne: string;
-  sampleTextTwo: string;
+  // the url to our api
+  apiAbsUrl: string;
 }
 
 const LOG_SOURCE: string = 'ContosoCommandSet';
 
 export default class ContosoCommandSet extends BaseListViewCommandSet<IContosoCommandSetProperties> {
 
+  private processing = false;
+
   @override
-  public onInit(): Promise<void> {
-    Log.info(LOG_SOURCE, 'Initialized.');
-    return Promise.resolve();
+  public async onInit(): Promise<void> {
+    Log.info(LOG_SOURCE, 'Initialized ContosoCommandSet.');
   }
 
   @override
-  public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
-    // const compareOneCommand: Command = this.tryGetCommand("InvokeServiceCommand");
-    // if (compareOneCommand) {
-    //   // This command should be hidden unless exactly one row is selected.
-    //   compareOneCommand.visible = event.selectedRows.length === 1;
-    // }
-  }
+  public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void { }
 
   @override
   public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
+
+    // determine which event fired, you can have multiple commands registered for a single class
+    // in this sample we only have one, but we retain the pattern
     switch (event.itemId) {
+
       case "InvokeServiceCommand":
 
-        // show properties pane to gather inputs?
-
-
-        // unblock the main thread
+        // create an async function to handle the web request to the API
+        // setTimeout with 0 will execute on the next event loop
         setTimeout(async () => {
 
-          // TODO:: add debounce
+          if (this.processing) {
+            // we have a pending request
+            return;
+          }
 
-          const client = await this.context.aadHttpClientFactory.getClient("https://contoso-invoke.azurewebsites.net");
-
-          let res: HttpClientResponse;
+          this.processing = true;
 
           try {
 
-            res = await client.post("https://contoso-invoke.azurewebsites.net/api/ReceiveInvocation", AadHttpClient.configurations.v1, {
+            // we create an aadHttpClient based on the url of the the api we will call.
+            const client = await this.context.aadHttpClientFactory.getClient(this.properties.apiAbsUrl);
+
+            const reqUrl = (new URL("/api/ReceiveInvocation", this.properties.apiAbsUrl)).toString();
+
+            const res: HttpClientResponse = await client.post(reqUrl, AadHttpClient.configurations.v1, {
               body: JSON.stringify({
                 user: this.context.pageContext.user,
                 siteId: this.context.pageContext.site.id.toString(),
@@ -78,16 +79,23 @@ export default class ContosoCommandSet extends BaseListViewCommandSet<IContosoCo
               }),
             });
 
+            if (!res.ok) {
+
+              const resp = await res.text();
+              console.error(Error(`Error [${res.status}: ${res.statusText}]: ${resp}`));
+
+            } else {
+
+              Dialog.alert("API Invoked Successfully");
+            }
+
           } catch (e) {
 
             console.error(e);
-          }
 
-          if (!res.ok) {
-            const resp = await res.text();
-            console.error(Error(`Error [${res.status}: ${res.statusText}]: ${resp}`));
-          } else {
-            Dialog.alert("API Invoked Successfully");
+          } finally {
+
+            this.processing = false;
           }
 
         }, 0);
