@@ -5,7 +5,7 @@
       "type": "edge",
       "request": "launch",
       "name": "Next: Edge",
-      "url": "https://318studios.sharepoint.com/sites/dev/Shared Documents/Forms/AllItems.aspx",
+      "url": "https://{tenant}.sharepoint.com/sites/dev/Shared Documents/Forms/AllItems.aspx",
       "userDataDir": "C:/Users/patrodg/AppData/Local/Microsoft/Edge Dev/User Data/Profile 1",
       "runtimeExecutable": "C:/Program Files (x86)/Microsoft/Edge Dev/Application/msedge.exe",
       "runtimeArgs": [
