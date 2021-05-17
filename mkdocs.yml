@@ -7,6 +7,10 @@ nav:
   - 'File Handler':
     - 'Overview': 'file-handler/index.md'
     - 'Tech Details': 'file-handler/tech-details.md'
+  - 'Remote Document Generation':
+    - 'Overview': 'list-view-invoke/index.md'
+    - 'Setup': 'list-view-invoke/setup.md'
+    - 'Tech Details': 'list-view-invoke/tech-details.md'
 
 theme:
   name: 'material'
