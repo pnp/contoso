@@ -6,5 +6,5 @@ If interested you can also [read more about the technology](./tech-details.md) b
 
 ## Application Flow
 
-![](/img/listview-invoke/Contoso-cmd-service-invoke-flow.png)
+![](../img/listview-invoke/Contoso-cmd-service-invoke-flow.png)
 

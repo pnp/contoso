@@ -11,7 +11,7 @@ Our new SharePoint integration adds a button to document libraries enabling secu
 The new file handler solution allows our customers to easily create, edit, and preview Markdown files using our existing SaaS services. We are excited to introduce this integration with OneDrive and SharePoint allowing us to seamlessly embed our custom functionality alongside the standard UI. [Read more about how we did it](./file-handler/index.md).
 
 
-![](/img/beach-banner.jpg)
+![](img/beach-banner.jpg)
 
 
 ----

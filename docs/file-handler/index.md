@@ -14,39 +14,39 @@ Because the application used to implement the file handler is 100% hosted and co
 
 When integrating with the new experience our file handler will be available in the "New" menu in OneDrive and SharePoint.
 
-![](/img/filehandler/new-menu.png)
+![](../img/filehandler/new-menu.png)
 
 When users select the menu option they will be redirected to the url registered within the [file handler registration](https://docs.microsoft.com/en-us/onedrive/developer/file-handlers/register-manually). This gives us the ability to provide a tailored experience across cloud providers without re-writing our entire codebase. We start with an empty editor in "New":
 
-![](/img/filehandler/new-editor-empty.png)
+![](../img/filehandler/new-editor-empty.png)
 
 We show a custom editor that displays the rendered Markdown as the user types:
 
-![](/img/filehandler/new-editor-content.png)
+![](../img/filehandler/new-editor-content.png)
 
 
 ### Edit
 
 For the editing experience we can click the file name, or use either the context menu:
 
-![](/img/filehandler/edit-open-contextmenu.png)
+![](../img/filehandler/edit-open-contextmenu.png)
 
 or the "Open" menu in the top menu bar after selecting a file
 
-![](/img/filehandler/edit-open-navmenu.png)
+![](../img/filehandler/edit-open-navmenu.png)
 
 Once you open the editor will be presented with a similar view as the create option, except the contents of the existing file are loaded for editing.
 
-![](/img/filehandler/edit-content.png)
+![](../img/filehandler/edit-content.png)
 
 
 ### Preview
 
 In preview mode we are able to show a rendered view of an existing file, accessed through the context menu
 
-![](/img/filehandler/preview-open-contextmenu.png)
+![](../img/filehandler/preview-open-contextmenu.png)
 
 Once in preview mode SharePoint and OneDrive render some UI elements to help us navigate within the library, highlighted here in blue. The remainder of the page is an iframe of our site where we can render the file.
 
-![](/img/filehandler/preview-content.png)
+![](../img/filehandler/preview-content.png)
 
