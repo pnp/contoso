@@ -493,7 +493,7 @@
 <li>In <a href="https://portal.azure.com/">Azure Portal</a> select "Create a resource"</li>
 <li>
 <p>Search for "service bus" and select the "Service Bus" option, then "Create"</p>
-<p><img alt="" src="/img/listview-invoke/setup-sb-1.png" /></p>
+<p><img alt="" src="../../img/listview-invoke/setup-sb-1.png" /></p>
 </li>
 <li>
 <p>Select the subscription, resource group, namespace, and location then select "Review + Create"</p>
@@ -503,7 +503,7 @@
 <li>On the left, select "Queues" under the "Entities" section</li>
 <li>
 <p>Select "+ Queue" at the top</p>
-<p><img alt="" src="/img/listview-invoke/setup-sb-2.png" /></p>
+<p><img alt="" src="../../img/listview-invoke/setup-sb-2.png" /></p>
 </li>
 <li>
 <p>Provide a name for the new queue and note it for later. You may adjust other settings as needed but the remaining defaults are fine for this demo setup. Once ready select "Create"</p>
@@ -513,11 +513,11 @@
 <li>Select "+ Add" at the top</li>
 <li>
 <p>Give the policy a name and choose the "Send" and "Listen" options and select "Create"</p>
-<p><img alt="" src="/img/listview-invoke/setup-sb-3.png" /></p>
+<p><img alt="" src="../../img/listview-invoke/setup-sb-3.png" /></p>
 </li>
 <li>
 <p>Once created select the policy to expose the keys and connection strings. Copy the value of "Primary Connection String".</p>
-<p><img alt="" src="/img/listview-invoke/setup-sb-4.png" /></p>
+<p><img alt="" src="../../img/listview-invoke/setup-sb-4.png" /></p>
 </li>
 <li>
 <p>Paste it into a text editor and remove everything after and including the last ";". Note this edited connection string for later.</p>
@@ -539,7 +539,7 @@
 <li>In <a href="https://portal.azure.com/">Azure Portal</a> select "Create a resource" </li>
 <li>
 <p>Search for "function app" and select the "Function App" option, then "Create"</p>
-<p><img alt="" src="/img/listview-invoke/setup-fa-1.png" /></p>
+<p><img alt="" src="../../img/listview-invoke/setup-fa-1.png" /></p>
 </li>
 <li>
 <p>Select a subscription, resource group, name, and region. For the remaining options:</p>
@@ -554,22 +554,22 @@
 <li>On the left, select "Authentication" under the "Settings" section</li>
 <li>
 <p>Select "Add identity provider"</p>
-<p><img alt="" src="/img/listview-invoke/setup-fa-2.png" /></p>
+<p><img alt="" src="../../img/listview-invoke/setup-fa-2.png" /></p>
 </li>
 <li>
 <p>In the dropdown select "Microsoft". Accept the defaults as shown below and select "Next: permissions".</p>
-<p><img alt="" src="/img/listview-invoke/setup-fa-3.png" /></p>
+<p><img alt="" src="../../img/listview-invoke/setup-fa-3.png" /></p>
 </li>
 <li>
 <p>Select "+ Add permission" and choose "User.Read", "offline_access", "openid", and "Files.ReadWrite.All" then select "Add"</p>
-<p><img alt="" src="/img/listview-invoke/setup-fa-4.png" /></p>
+<p><img alt="" src="../../img/listview-invoke/setup-fa-4.png" /></p>
 </li>
 <li>
 <p>Once the identity provider is created, select the "edit" pencil icon and remove the "v2.0" from the end of the "Issuer URL" value, leaving the final "/" in place. The value should be "https://sts.windows.net/{your-tenant-id}/"</p>
 </li>
 <li>
 <p>At this point, navigate to the url of your function you should be prompted to login and consent to the app permissions. If successful you will be land on a screen similar to below. The url will be of the form https://{app-name}.azurewebsites.net. <strong>This step is required to establish the enterprise app entry used later for app permissions approval.</strong></p>
-<p><img alt="" src="/img/listview-invoke/setup-fa-5.png" /></p>
+<p><img alt="" src="../../img/listview-invoke/setup-fa-5.png" /></p>
 </li>
 <li>
 <p>Navigate to "Configuration" under the "Settings" section of the function app. You need to add two keys whose values both come from the previous section on setting up the service bus. Once both are added select "Save" from at the top and "Continue" when prompted to update the app with the new settings.</p>
