@@ -344,6 +344,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configure-local-settings" class="md-nav__link">
+    Configure Local Settings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#deploy-azure-function-app" class="md-nav__link">
     Deploy Azure Function App
   </a>
@@ -353,6 +360,13 @@
         <li class="md-nav__item">
   <a href="#update-spfx-solution" class="md-nav__link">
     Update SPFx Solution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-solution" class="md-nav__link">
+    Deploy Solution
   </a>
   
 </li>
@@ -368,6 +382,18 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../multi-tenant/" class="md-nav__link">
+      Enable Multi-tenant Auth
+    </a>
   </li>
 
         
@@ -440,6 +466,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#configure-local-settings" class="md-nav__link">
+    Configure Local Settings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#deploy-azure-function-app" class="md-nav__link">
     Deploy Azure Function App
   </a>
@@ -449,6 +482,13 @@
         <li class="md-nav__item">
   <a href="#update-spfx-solution" class="md-nav__link">
     Update SPFx Solution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-solution" class="md-nav__link">
+    Deploy Solution
   </a>
   
 </li>
@@ -485,8 +525,11 @@
 <li><a href="#create-service-bus-queue">Create Service Bus Queue</a></li>
 <li><a href="#create-azure-functions-app">Create Azure App Function</a></li>
 <li><a href="#configure-aad-app-settings">Configure AAD App Settings</a></li>
+<li><a href="#configure-local-settings">Configure Local Settings</a></li>
 <li><a href="#deploy-azure-function-app">Deploy Azure Function App</a></li>
 <li><a href="#update-spfx-solution">Update SPFx Solution</a></li>
+<li><a href="#deploy-solution">Deploy Solution</a></li>
+<li><a href="#next-steps">Next Steps</a></li>
 </ul>
 <h2 id="create-service-bus-queue">Create Service Bus Queue<a class="headerlink" href="#create-service-bus-queue" title="Permanent link">&para;</a></h2>
 <ol>
@@ -607,8 +650,21 @@
 </ul>
 </blockquote>
 <p><a href="#sections">back to setup index</a></p>
+<h2 id="configure-local-settings">Configure Local Settings<a class="headerlink" href="#configure-local-settings" title="Permanent link">&para;</a></h2>
+<p>To ensure smooth publishing of the application you need to create a "local.settings.json" file within the "azure-functions" folder.</p>
+<pre><code class="language-json">{
+  &quot;IsEncrypted&quot;: false,
+  &quot;Values&quot;: {
+    &quot;FUNCTIONS_WORKER_RUNTIME&quot;: &quot;node&quot;,
+    &quot;AzureWebJobsStorage&quot;: &quot;UseDevelopmentStorage=true&quot;
+}
+</code></pre>
+<p><a href="#sections">back to setup index</a></p>
 <h2 id="deploy-azure-function-app">Deploy Azure Function App<a class="headerlink" href="#deploy-azure-function-app" title="Permanent link">&para;</a></h2>
 <p>This section uses the <a href="https://docs.microsoft.com/en-us/cli/azure/">Azure CLI</a> to conduct the deployment. There are many ways to deploy apps to Azure and you should use the methods most comfortable to you.</p>
+<blockquote>
+<p>You also need to install the azure function tools v3 using <code>npm i -g azure-functions-core-tools@3 --unsafe-perm true</code></p>
+</blockquote>
 <ol>
 <li>Open a command window and navigate to the project folder "azure-function"</li>
 <li>Enter <code>az login</code> to login to the Azure instance</li>
@@ -635,16 +691,24 @@
 </code></pre>
 </li>
 <li>
-<p>Now you need to update both the "./sharepoint/assets/ClientSideInstance.xml", "./sharepoint/assets/elements.xml", and "./config/serve.json" to include the base function url. In the files locate the URL "https://{app-name}.azurewebsites.net" and replace {app-name} with the name of your application. As well in "./config/serve.json" update the "pageUrl" values to point to your develpment tenant.</p>
+<p>Update "./sharepoint/assets/ClientSideInstance.xml" and "./sharepoint/assets/elements.xml" changing the {app-name} and {app-id} values to those of your function app and backing AAD application.</p>
 </li>
+<li>Update "./config/serve.json" changing the value of pageUrl to point to a document library in your development tenant, also update the properties for both serve configurations to set the apiAbsUrl and appId values.</li>
+<li>Finally, update "./src/extensions/contoso/ContosoCommandSet.manifest.json" updating the value "https://{app-name}.azurewebsites.net/api/IconServer" with your app name.</li>
 </ol>
+<p><a href="#sections">back to setup index</a></p>
+<h2 id="deploy-solution">Deploy Solution<a class="headerlink" href="#deploy-solution" title="Permanent link">&para;</a></h2>
+<p>Follow the <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-cmdset-with-dialog-api#deploy-the-extension-to-sharepoint-online">docs to deploy the solution</a> and approve the permissions in the SharePoint admin site for the API.</p>
 <p><a href="#sections">back to setup index</a></p>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <p>At this point the solution is configured for testing in your local environment. While testing the expected behavior will follow the flow outlined in the <a href="../">overview page</a>.</p>
 <ul>
+<li><a href="../multi-tenant/">Extend support for multi-tenant authentication</a></li>
+<li><a href="https://aka.ms/spfx">SharePoint Framework Overview</a></li>
 <li><a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-cmdset-with-dialog-api">Review the Docs on extending list view command sets</a></li>
 <li><a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-cmdset-with-dialog-api#deploy-the-extension-to-sharepoint-online">Review the Docs for deployment</a></li>
 </ul>
+<p><a href="#sections">back to setup index</a></p>
                 
               
               
@@ -678,13 +742,13 @@
           </a>
         
         
-          <a href="../tech-details/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../multi-tenant/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Tech Details
+                Enable Multi-tenant Auth
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

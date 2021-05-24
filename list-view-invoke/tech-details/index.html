@@ -295,6 +295,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../multi-tenant/" class="md-nav__link">
+      Enable Multi-tenant Auth
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -499,7 +511,7 @@
 <p>We used two functions, one to receive and queue the request and a second to do the work, to illustrate one way to help handle scale by ensuring a quick response back to the user, while providing time to complete the operations.</p>
 <h2 id="azure-service-bus">Azure Service Bus<a class="headerlink" href="#azure-service-bus" title="Permanent link">&para;</a></h2>
 <p>The <a href="https://docs.microsoft.com/en-us/azure/service-bus-messaging/">Service Bus</a> allows us to create a buffer between requests (fast, many) and document generation (slower). This is a lightweight way to scale an application and met our needs - we also considered <a href="https://azure.microsoft.com/en-us/products/azure-sql/">Azure SQL</a>, but simple messaging worked in this case.</p>
-<p>One consideration is that we are storing the user's bearer token within the queue message. OK for a sample, but handling of token in production should adhear to the <a href="https://docs.microsoft.com/en-us/azure/architecture/example-scenario/secrets/secure-refresh-tokens">best available guidance</a>.</p>
+<p>One consideration is that we are storing the user's bearer token within the queue message. OK for a sample, but the handling of tokens in production should adhear to the <a href="https://docs.microsoft.com/en-us/azure/architecture/example-scenario/secrets/secure-refresh-tokens">best available guidance</a>.</p>
 <h2 id="reference-links">Reference Links<a class="headerlink" href="#reference-links" title="Permanent link">&para;</a></h2>
 <p>We found the following list of links helpful while developing our solution:</p>
 <h3 id="spfx-app">SPFx app<a class="headerlink" href="#spfx-app" title="Permanent link">&para;</a></h3>
@@ -544,7 +556,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../setup/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../multi-tenant/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -553,7 +565,7 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Setup
+                Enable Multi-tenant Auth
               </div>
             </div>
           </a>
