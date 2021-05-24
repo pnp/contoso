@@ -29,7 +29,6 @@ This article is an extension of [setup](./setup.md) covering extending your sing
 1. In [Azure Portal](https://portal.azure.com/) locate the function application you created. Select "Authentication" under the "Settings" heading.
 2. Select the pencil icon to edit the Identity Provider.
 3. Clear the issuer URL entry so it is blank and select "Save"
-4. Copy the url of the function app and open it in a window authenticated to the external tenant to which you will now install the SPFx app. This will take your through the consent process, creating an entry in the external tenants Enterprise Applications.
 
 ## Consent to Application in new Tenant
 
