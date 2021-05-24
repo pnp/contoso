@@ -18,7 +18,7 @@
   "items": {
     "InvokeServiceCommand": {
       "title": { "default": "Invoke Service" },
-      "iconImageUrl": "icons/request.png",
+      "iconImageUrl": "https://{app-name}.azurewebsites.net/api/IconServer",
       "type": "command"
     }
   }

@@ -9,7 +9,8 @@
         "810e5d77-d418-4386-b67a-c3291d0bd673": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
           "properties": {
-            "apiAbsUrl": "https://{app-name}.azurewebsites.net"
+            "apiAbsUrl": "https://{app-name}.azurewebsites.net",
+            "appId": "{app-id}"
           }
         }
       }
@@ -20,7 +21,8 @@
         "810e5d77-d418-4386-b67a-c3291d0bd673": {
           "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
           "properties": {
-            "apiAbsUrl": "https://{app-name}.azurewebsites.net"
+            "apiAbsUrl": "https://{app-name}.azurewebsites.net",
+            "appId": "{app-id}"
           }
         }
       }

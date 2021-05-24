@@ -16,8 +16,14 @@ import * as strings from 'ContosoCommandSetStrings';
  * You can define an interface to describe it.
  */
 export interface IContosoCommandSetProperties {
-  // the url to our api
+  /**
+   * abolute base url to the azure functions app
+   */
   apiAbsUrl: string;
+  /**
+   * app id of the AAD application backing the functions app
+   */
+  appId: string;
 }
 
 const LOG_SOURCE: string = 'ContosoCommandSet';
@@ -57,7 +63,7 @@ export default class ContosoCommandSet extends BaseListViewCommandSet<IContosoCo
           try {
 
             // we create an aadHttpClient based on the url of the the api we will call.
-            const client = await this.context.aadHttpClientFactory.getClient(this.properties.apiAbsUrl);
+            const client = await this.context.aadHttpClientFactory.getClient(this.properties.appId);
 
             const reqUrl = (new URL("/api/ReceiveInvocation", this.properties.apiAbsUrl)).toString();
 

@@ -8,8 +8,11 @@ The demo has a number of piece to setup and this guide will step through each. T
 - [Create Service Bus Queue](#create-service-bus-queue)
 - [Create Azure App Function](#create-azure-functions-app)
 - [Configure AAD App Settings](#configure-aad-app-settings)
+- [Configure Local Settings](#configure-local-settings)
 - [Deploy Azure Function App](#deploy-azure-function-app)
 - [Update SPFx Solution](#update-spfx-solution)
+- [Deploy Solution](#deploy-solution)
+- [Next Steps](#next-steps)
 
 ## Create Service Bus Queue
 
@@ -116,9 +119,26 @@ The demo has a number of piece to setup and this guide will step through each. T
 
 [back to setup index](#sections)
 
+## Configure Local Settings
+
+To ensure smooth publishing of the application you need to create a "local.settings.json" file within the "azure-functions" folder.
+
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true"
+}
+```
+
+[back to setup index](#sections)
+
 ## Deploy Azure Function App
 
 This section uses the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/) to conduct the deployment. There are many ways to deploy apps to Azure and you should use the methods most comfortable to you.
+
+> You also need to install the azure function tools v3 using `npm i -g azure-functions-core-tools@3 --unsafe-perm true`
 
 1. Open a command window and navigate to the project folder "azure-function"
 2. Enter `az login` to login to the Azure instance
@@ -144,7 +164,15 @@ This section uses the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/) t
             }
         ],
 
-3. Now you need to update both the "./sharepoint/assets/ClientSideInstance.xml", "./sharepoint/assets/elements.xml", and "./config/serve.json" to include the base function url. In the files locate the URL "https://{app-name}.azurewebsites.net" and replace {app-name} with the name of your application. As well in "./config/serve.json" update the "pageUrl" values to point to your develpment tenant.
+3. Update "./sharepoint/assets/ClientSideInstance.xml" and "./sharepoint/assets/elements.xml" changing the {app-name} and {app-id} values to those of your function app and backing AAD application.
+4. Update "./config/serve.json" changing the value of pageUrl to point to a document library in your development tenant, also update the properties for both serve configurations to set the apiAbsUrl and appId values.
+5. Finally, update "./src/extensions/contoso/ContosoCommandSet.manifest.json" updating the value "https://{app-name}.azurewebsites.net/api/IconServer" with your app name.
+
+[back to setup index](#sections)
+
+## Deploy Solution
+
+Follow the [docs to deploy the solution](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-cmdset-with-dialog-api#deploy-the-extension-to-sharepoint-online) and approve the permissions in the SharePoint admin site for the API.
 
 [back to setup index](#sections)
 
@@ -152,10 +180,12 @@ This section uses the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/) t
 
 At this point the solution is configured for testing in your local environment. While testing the expected behavior will follow the flow outlined in the [overview page](./index.md).
 
+- [Extend support for multi-tenant authentication](./multi-tenant.md)
+- [SharePoint Framework Overview](https://aka.ms/spfx)
 - [Review the Docs on extending list view command sets](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-cmdset-with-dialog-api)
 - [Review the Docs for deployment](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-cmdset-with-dialog-api#deploy-the-extension-to-sharepoint-online)
 
-
+[back to setup index](#sections)
 
 
 

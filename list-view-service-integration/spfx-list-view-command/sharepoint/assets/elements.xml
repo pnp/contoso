@@ -6,6 +6,6 @@
         RegistrationType="List"
         Location="ClientSideExtension.ListViewCommandSet.CommandBar"
         ClientSideComponentId="810e5d77-d418-4386-b67a-c3291d0bd673"
-        ClientSideComponentProperties="{&quot;apiAbsUrl&quot;:&quot;https://{app-name}.azurewebsites.net&quot;}">
+        ClientSideComponentProperties="{&quot;apiAbsUrl&quot;:&quot;https://{app-name}.azurewebsites.net&quot;,&quot;appId&quot;:&quot;{app-id}&quot;}">
     </CustomAction>
 </Elements>

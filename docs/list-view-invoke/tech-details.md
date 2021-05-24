@@ -18,7 +18,7 @@ We used two functions, one to receive and queue the request and a second to do t
 
 The [Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) allows us to create a buffer between requests (fast, many) and document generation (slower). This is a lightweight way to scale an application and met our needs - we also considered [Azure SQL](https://azure.microsoft.com/en-us/products/azure-sql/), but simple messaging worked in this case.
 
-One consideration is that we are storing the user's bearer token within the queue message. OK for a sample, but handling of token in production should adhear to the [best available guidance](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/secrets/secure-refresh-tokens).
+One consideration is that we are storing the user's bearer token within the queue message. OK for a sample, but the handling of tokens in production should adhear to the [best available guidance](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/secrets/secure-refresh-tokens).
 
 ## Reference Links
 
