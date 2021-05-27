@@ -1,6 +1,6 @@
 # ISV resources
 
-This folder contains resources relevant for ISV's and for anyone interested in integrating the SharePoint and OneDrive platform into their solutions.
+This folder contains resources relevant for ISVs and for anyone interested in integrating the SharePoint and OneDrive platform into their solutions.
 
 Available resources:
 
