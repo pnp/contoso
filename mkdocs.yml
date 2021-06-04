@@ -12,6 +12,10 @@ nav:
     - 'Setup': 'list-view-invoke/setup.md'
     - 'Enable Multi-tenant Auth': 'list-view-invoke/multi-tenant.md'
     - 'Tech Details': 'list-view-invoke/tech-details.md'
+  - 'OneDrive as your application files repository'
+    - 'Overview': 'onedrivefiles/index.md'
+    - 'Tech Details': 'onedrivefiles/tech-details.md'
+
 
 theme:
   name: 'material'
