@@ -10,7 +10,10 @@ This repository contains ISV focused reference samples and resources used in con
 
 ## Available Resources
 
-- [ISV Pitch Deck](./resources/ISV%20Pitch%20Deck)
+The "ISV Pitch Deck" which provides an end-to-end overview of all the possible integration options there are with OneDrive and SharePoint. Each integration technique/option has a high level description combined with a set of resources for if you want to learn more.
+
+- [ISV Pitch Deck - PDF version](https://aka.ms/isvpitchpdf)
+- [ISV Pitch Deck - PPTX version](https://aka.ms/isvpitch)
 
 ## Contributing
 
